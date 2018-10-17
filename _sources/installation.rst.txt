@@ -18,8 +18,8 @@ written and tested improvements to the information below.
 * sbt 0.13.x (Available from http://www.scala-sbt.org/)
 * `Sphinx restructured text tool <http://sphinx-doc.org/>`_ (for building local documentation)
 
-Standalone installation on Linux & macOS X
--------------------------------------------
+Standalone installation on Linux & macOS
+----------------------------------------
 
 Get the sources of Stainless by cloning the official Stainless repository:
 
