@@ -29,6 +29,23 @@ object EqualityLaws {
   }
 
   def bigIntEquality: Equality[BigInt] = new Equality[BigInt] {
-    def eqv(x: BigInt, y: BigInt) = x == y
+    def eqv(x: BigInt, y: BigInt): Boolean = x == y
+  }
+
+  sealed abstract class Nat {
+    def ==(m: Nat): Boolean = {
+      (this, m) match {
+        case (Succ(ts), Succ(ms)) => ts == ms
+        case (Zero, Zero) => true
+        case _ => false
+      }
+    }
+  }
+
+  final case object Zero extends Nat
+  final case class Succ(prev: Nat) extends Nat
+
+  def natEquality: Equality[Nat] = new Equality[Nat] {
+    def eqv(x: Nat, y: Nat): Boolean = x == y
   }
 }
