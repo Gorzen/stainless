@@ -4,10 +4,15 @@ import stainless.annotation._
 
 object EqualityLaws {
 
-  // Equality is an equivalence relation
+  /**
+   * Equality is an equivalence relation, so it must verifies:
+   * - reflexive
+   * - symmetric
+   * - transitive
+   */
   abstract class Equality[A] {
     def eqv(x: A, y: A): Boolean
-    def neqv(x: A, y: A): Boolean = !eqv(x, y)
+    final def neqv(x: A, y: A): Boolean = !eqv(x, y)
 
     @law
     def law_reflexive(x: A) = {
