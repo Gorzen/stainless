@@ -5,7 +5,7 @@ import stainless.annotation._
 object PartialOrderLaws {
 
   // Laws: reflexive, antisymmetric, transitive
-  abstract class PartialOrder[A] /*extends Equality[A]*/ {
+  abstract class PartialOrder[A] extends EqualityLaws.Equality[A] {
 
     /**
      * Result of comparison of x and y
@@ -31,17 +31,17 @@ object PartialOrderLaws {
     }
 
     @law
-    def law_reflexive(x: A) = {
+    def law_reflexive_partial_order(x: A) = {
       lteqv(x, x)
     }
 
     @law
-    def law_antisymmetric(x: A, y: A) = {
+    def law_antisymmetric_partial_order(x: A, y: A) = {
       (lteqv(x, y) && lteqv(y, x)) ==> eqv(x, y)
     }
 
     @law
-    def law_transitive(x: A, y: A, z: A) = {
+    def law_transitive_partial_order(x: A, y: A, z: A) = {
       (lteqv(x, y) && lteqv(y, z)) ==> lteqv(x, z)
     }
   }
@@ -88,17 +88,27 @@ object PartialOrderLaws {
     }
   }.holds
 
+  // Weird, why didn't it work? (timeout)
+  @induct
+  def law_reflexive_equality_Nat(x: Nat): Boolean = {
+    x == x
+  }.holds
+
   def natPartialOrder: PartialOrder[Nat] = new PartialOrder[Nat] {
     def partialComparison(x: Nat, y: Nat): Option[Int] = {
       Some(x compare y)
     }
 
-    override def law_antisymmetric(x: Nat, y: Nat) = {
-      super.law_antisymmetric(x, y) because law_antisymmetric_Nat(x, y)
+    override def law_antisymmetric_partial_order(x: Nat, y: Nat) = {
+      super.law_antisymmetric_partial_order(x, y) because law_antisymmetric_Nat(x, y)
     }
 
-    override def law_transitive(x: Nat, y: Nat, z: Nat) = {
-      super.law_transitive(x, y, z) because law_transitive_Nat(x, y, z)
+    override def law_transitive_partial_order(x: Nat, y: Nat, z: Nat) = {
+      super.law_transitive_partial_order(x, y, z) because law_transitive_Nat(x, y, z)
+    }
+
+    override def law_reflexive_equality(x: Nat) = {
+      super.law_reflexive_equality(x) because law_reflexive_equality_Nat(x)
     }
   }
 }

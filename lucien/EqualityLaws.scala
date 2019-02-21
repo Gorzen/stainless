@@ -15,17 +15,17 @@ object EqualityLaws {
     final def neqv(x: A, y: A): Boolean = !eqv(x, y)
 
     @law
-    def law_reflexive(x: A) = {
+    def law_reflexive_equality(x: A) = {
       eqv(x, x)
     }
 
     @law
-    def law_symmetric(x: A, y: A) = {
+    def law_symmetric_equality(x: A, y: A) = {
       eqv(x, y) == eqv(y, x)
     }
 
     @law
-    def law_transitive(x: A, y: A, z: A) = {
+    def law_transitive_equality(x: A, y: A, z: A) = {
       (eqv(x, y) && eqv(y, z)) ==> eqv(x, z)
     }
   }
