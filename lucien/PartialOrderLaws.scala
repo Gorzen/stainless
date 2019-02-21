@@ -88,7 +88,7 @@ object PartialOrderLaws {
     }
   }.holds
 
-  // Weird, why didn't it work? (timeout)
+  // Weird, why didn't it work now? (timeout)
   @induct
   def law_reflexive_equality_Nat(x: Nat): Boolean = {
     x == x
@@ -108,6 +108,9 @@ object PartialOrderLaws {
     }
 
     override def law_reflexive_equality(x: Nat) = {
+      // Can I write
+      // super.law_reflexive_equality(x) because EqualityLaws.law_reflexive_equality(x) ?
+      // Doesn't really make sense but that's what it is it has already been verified
       super.law_reflexive_equality(x) because law_reflexive_equality_Nat(x)
     }
   }
