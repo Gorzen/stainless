@@ -27,29 +27,12 @@ object EqualityLaws {
     @law
     def law_transitive(x: A, y: A, z: A) = {
       (eqv(x, y) && eqv(y, z)) ==> eqv(x, z)
-      /*if(eqv(x, y) && eqv(y, z))
-        eqv(x, z)
-      else
-        true*/
     }
   }
 
   def bigIntEquality: Equality[BigInt] = new Equality[BigInt] {
     def eqv(x: BigInt, y: BigInt): Boolean = x == y
   }
-
-  sealed abstract class Nat {
-    def ==(m: Nat): Boolean = {
-      (this, m) match {
-        case (Succ(ts), Succ(ms)) => ts == ms
-        case (Zero, Zero) => true
-        case _ => false
-      }
-    }
-  }
-
-  final case object Zero extends Nat
-  final case class Succ(prev: Nat) extends Nat
 
   def natEquality: Equality[Nat] = new Equality[Nat] {
     def eqv(x: Nat, y: Nat): Boolean = x == y

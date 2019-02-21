@@ -5,7 +5,6 @@ import stainless.annotation._
 object PartialOrderLaws {
 
   // Laws: reflexive, antisymmetric, transitive
-  // How to extend Equality
   abstract class PartialOrder[A] /*extends Equality[A]*/ {
 
     /**
@@ -19,9 +18,6 @@ object PartialOrderLaws {
     def partialComparison(x: A, y: A): Option[Int]
 
     final def eqv(x: A, y: A): Boolean = {
-      // partialComparison(x, y) == Some(0) fails for some reason
-      // but it doesn't really make sense do define the equals by a law.
-      //lteqv(x, y) && lteqv(y, x)
       partialComparison(x, y) == Some(0)
     }
 
@@ -61,49 +57,33 @@ object PartialOrderLaws {
     }
   }
 
-  sealed abstract class Nat {
-    /*def ==(m: Nat): Boolean = {
-      (this, m) match {
-        case (Succ(ts), Succ(ms)) => ts == ms
-        case (Zero, Zero) => true
-        case _ => false
-      }
-    }*/
-
-    def <(m: Nat): Boolean = {
-      (this, m) match {
-        case (Succ(ts), Succ(ms)) => ts < ms
-        case (Zero, Succ(ms)) => true
-        case _ => false
-      }
-    }
-
-    def <=(m: Nat): Boolean = {
-      this == m || this < m
-    }
-
-    def compare(m: Nat): Int = {
-      if(this < m)
-        -1
-      else if (this == m)
-        0
-      else
-        1
-    }
-  }
-
-  final case object Zero extends Nat
-  final case class Succ(prev: Nat) extends Nat
-
   def law_antisymmetric_Nat(x: Nat, y: Nat): Boolean = {
     ((x <= y && y <= x) ==> (x == y)) because {
       (x, y) match {
         case (Zero, Zero) => true
         case (Zero, Succ(_)) => true
-        case (Succ(n), Zero) => true
+        case (Succ(_), Zero) => true
         case (Succ(n), Succ(m)) =>
           assert(law_antisymmetric_Nat(n, m))
           check((x <= y && y <= x) ==> (x == y))
+      }
+    }
+  }.holds
+
+  // Exhaustively write every case? or should it be concise?
+  def law_transitive_Nat(x: Nat, y: Nat, z: Nat): Boolean = {
+    ((x <= y && y <= z) ==> (x <= z)) because {
+      (x, y, z) match {
+        case (Zero, Zero, Zero) => true
+        case (Succ(_), Zero, Zero) => true
+        case (Zero, Succ(_), Zero) => true
+        case (Zero, Zero, Succ(_)) => true
+        case (Succ(_), Succ(_), Zero) => true
+        case (Succ(_), Zero, Succ(_)) => true
+        case (Zero, Succ(_), Succ(_)) => true
+        case (Succ(n), Succ(m), Succ(l)) =>
+          assert(law_transitive_Nat(n, m, l))
+          check((x <= y && y <= z) ==> (x <= z))
       }
     }
   }.holds
@@ -115,6 +95,10 @@ object PartialOrderLaws {
 
     override def law_antisymmetric(x: Nat, y: Nat) = {
       super.law_antisymmetric(x, y) because law_antisymmetric_Nat(x, y)
+    }
+
+    override def law_transitive(x: Nat, y: Nat, z: Nat) = {
+      super.law_transitive(x, y, z) because law_transitive_Nat(x, y, z)
     }
   }
 }
