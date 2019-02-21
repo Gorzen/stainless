@@ -5,7 +5,7 @@ import stainless.annotation._
 object EqualityLaws {
 
   /**
-   * Equality is an equivalence relation, so it must verifies:
+   * Equality is an equivalence relation, so it must be:
    * - reflexive
    * - symmetric
    * - transitive
@@ -26,10 +26,11 @@ object EqualityLaws {
 
     @law
     def law_transitive(x: A, y: A, z: A) = {
-      if(eqv(x, y) && eqv(y, z))
+      (eqv(x, y) && eqv(y, z)) ==> eqv(x, z)
+      /*if(eqv(x, y) && eqv(y, z))
         eqv(x, z)
       else
-        true
+        true*/
     }
   }
 
