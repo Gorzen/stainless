@@ -29,12 +29,4 @@ object EqualityLaws {
       (eqv(x, y) && eqv(y, z)) ==> eqv(x, z)
     }
   }
-
-  def bigIntEquality: Equality[BigInt] = new Equality[BigInt] {
-    def eqv(x: BigInt, y: BigInt): Boolean = x == y
-  }
-
-  def natEquality: Equality[Nat] = new Equality[Nat] {
-    def eqv(x: Nat, y: Nat): Boolean = x == y
-  }
 }
