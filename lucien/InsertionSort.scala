@@ -22,10 +22,9 @@ object InsertionSort {
     l match {
       case Nil() => Cons(e, Nil[T]())
       case Cons(x, xs) if(comparator.lteqv(e, x)) =>
-        assert(lemma1(e, x, xs))
         Cons(e, Cons(x, xs))
       case Cons(x, xs) =>
-        assert(lemma2(e, x, xs))
+        assert(lemma(e, x, xs))
         Cons(x, sortedIns(e, xs))
     }
   } ensuring { res =>
@@ -39,11 +38,7 @@ object InsertionSort {
     case _ => true
   }
 
-  def lemma1[T](e: T, x: T, xs: List[T])(implicit comparator: TotalOrder[T]): Boolean = {
-    (isSorted(Cons(x, xs)) && comparator.lteqv(e, x)) ==> isSorted(Cons(e, Cons(x, xs)))
-  }.holds
-
-  def lemma2[T](e: T, x: T, xs: List[T])(implicit comparator: TotalOrder[T]): Boolean = {
+  def lemma[T](e: T, x: T, xs: List[T])(implicit comparator: TotalOrder[T]): Boolean = {
     !comparator.lteqv(e, x) ==> comparator.lteqv(x, e) because comparator.law_connex_total_order(e, x)
     (isSorted(Cons(x, xs)) && comparator.lteqv(x, e)) ==> isSorted(Cons(x, sortedIns(e, xs)))
   }.holds
