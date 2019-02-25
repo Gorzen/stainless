@@ -12,8 +12,7 @@ object InsertionSort {
       case Cons(x, xs) => sortedIns(x, sort(xs))
     }
   } ensuring { res =>
-    l.content == res.content &&
-    l.size == res.size &&
+    l.groupBy(identity) == res.groupBy(identity)
     isSorted(res)
   }
 
@@ -28,9 +27,8 @@ object InsertionSort {
         Cons(x, sortedIns(e, xs))
     }
   } ensuring { res =>
-    Cons(e, l).content == res.content &&
-    isSorted(res) &&
-    (l.size + 1) == res.size
+    Cons(e, l).groupBy(identity) == res.groupBy(identity) &&
+    isSorted(res)
   }
 
   def isSorted[T](l: List[T])(implicit comparator: TotalOrder[T]): Boolean = l match {
@@ -39,7 +37,7 @@ object InsertionSort {
   }
 
   def lemma[T](e: T, x: T, xs: List[T])(implicit comparator: TotalOrder[T]): Boolean = {
-    !comparator.lteqv(e, x) ==> comparator.lteqv(x, e) because comparator.law_connex_total_order(e, x)
+    (!comparator.lteqv(e, x) ==> comparator.lteqv(x, e)) because comparator.law_connex_total_order(e, x)
     (isSorted(Cons(x, xs)) && comparator.lteqv(x, e)) ==> isSorted(Cons(x, sortedIns(e, xs)))
   }.holds
 }
