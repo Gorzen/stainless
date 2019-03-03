@@ -11,7 +11,7 @@ object InsertionSort {
       case x :: xs => sortedIns(x, sort(xs))
     }
   } ensuring { res =>
-    l.groupBy(identity) == res.groupBy(identity)
+    l.groupBy(identity) == res.groupBy(identity) &&
     isSorted(res)
   }
 
