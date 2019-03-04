@@ -5,13 +5,19 @@ import stainless.proof._
 object InsertionSort {
   import TotalOrderLaws.TotalOrder
 
+  def bag[T](list: List[T]): Bag[T] = list match {
+    case Nil() => Bag.empty[T]
+    case Cons(x, xs) => bag(xs) + x
+  }
+
   def sort[T](l: List[T])(implicit comparator: TotalOrder[T]): List[T] =  {
     l match {
       case Nil() => Nil[T]()
       case x :: xs => sortedIns(x, sort(xs))
     }
   } ensuring { res =>
-    l.groupBy(identity) == res.groupBy(identity) &&
+    bag(l) == bag(res) &&
+    // l.groupBy(identity) == res.groupBy(identity) &&
     isSorted(res)
   }
 
@@ -26,7 +32,9 @@ object InsertionSort {
         x :: sortedIns(e, xs)
     }
   } ensuring { res =>
-    (e :: l).groupBy(identity) == res.groupBy(identity) &&
+    bag(e :: l) == bag(res) &&
+    l.size + 1 == res.size &&
+    // (e :: l).groupBy(identity) == res.groupBy(identity) &&
     isSorted(res)
   }
 

@@ -5,18 +5,39 @@ import stainless.proof._
 object MergeSort {
   import TotalOrderLaws.TotalOrder
 
+  def bag[T](list: List[T]): Bag[T] = list match {
+    case Nil() => Bag.empty[T]
+    case Cons(x, xs) => bag(xs) + x
+  }
+
   def sort[T](l: List[T])(implicit comparator: TotalOrder[T]): List[T] =  {
+    decreases(l.size)
     l match {
       case x1 :: x2 :: xs =>
-        val (left, right) = l.evenSplit
-        assert(lemma_sort(l, left, right))
+        val (left, right) = split(l)
         merge(sort(left), sort(right))
       case _ => l
     }
   } ensuring { res =>
     l.size == res.size &&
-    l.content == res.content && // this is the issue
+    bag(l) == bag(res) &&
     isSorted(res)
+  }
+
+  def split[T](list: List[T]): (List[T], List[T]) = {
+    require(list.size > 1)
+    list match {
+      case Cons(x, xs) if xs.size <= 2 =>
+        (List(x), xs)
+      case Cons(x1, Cons(x2, xs)) =>
+        val (s1, s2) = split(xs)
+        (Cons(x1, s1), Cons(x2, s2))
+    }
+  } ensuring { res =>
+    res._1.size + res._2.size == list.size &&
+    res._1.size > 0 &&
+    res._2.size > 0 &&
+    bag(res._1) ++ bag(res._2) == bag(list)
   }
 
   def merge[T](left: List[T], right: List[T])(implicit comparator: TotalOrder[T]): List[T] = {
@@ -31,8 +52,8 @@ object MergeSort {
         rightHead :: merge(left, rightTail)
     }
   } ensuring { res =>
-    (left ++ right).content == res.content &&
-    (left ++ right).size == res.size &&
+    bag(left) ++ bag(right) == bag(res) &&
+    (left.size + right.size) == res.size &&
     isSorted(res)
   }
 
@@ -41,16 +62,9 @@ object MergeSort {
     case _ => true
   }
 
-  //How does this not terminate? The arguments are smaller
   def lemma_merge[T](leftHead: T, leftTail: List[T], rightHead: T, rightTail: List[T])(implicit comparator: TotalOrder[T]): Boolean = {
     require(isSorted(leftHead :: leftTail) && isSorted(rightHead :: rightTail) && !comparator.lteqv(leftHead, rightHead))
     !comparator.lteqv(leftHead, rightHead) ==> comparator.lteqv(rightHead, leftHead) because comparator.law_connex_total_order(leftHead, rightHead)
     (comparator.lteqv(rightHead, leftHead) && isSorted(merge(leftHead :: leftTail, rightTail))) ==> isSorted(rightHead :: merge(leftHead :: leftTail, rightTail))
-  }.holds
-
-  def lemma_sort[T](list: List[T], left: List[T], right: List[T])(implicit comparator: TotalOrder[T]): Boolean = {
-    require((left, right) == list.evenSplit)
-    //assert(left ++ right == list) stainless cannot prove this
-    (left ++ right).content == list.content //stainless cannot prove this either, drop and take have no guarantee together
   }.holds
 }
