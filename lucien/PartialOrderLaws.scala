@@ -16,16 +16,17 @@ object PartialOrderLaws {
      * - positive iff 'x > y'
      */
     def partialComparison(x: A, y: A): Option[Int] = {
-      if(lteqv(x, y))
+      if(lteqv(x, y)) {
         if(lteqv(y, x))
           Some(0)
         else
           Some(-1)
-      else
+      } else {
         if(lteqv(y, x))
           Some(1)
         else
           None[Int]()
+      }
     }
 
     def lteqv(x: A, y: A): Boolean
