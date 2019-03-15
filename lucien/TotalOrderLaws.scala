@@ -14,9 +14,17 @@ object TotalOrderLaws {
      * - zero     iff 'x == y'
      * - positive iff 'x > y'
      */
-    def compare(x: A, y: A): Int
+    def compare(x: A, y: A): Int = {
+      if(lteqv(x, y))
+        if(lteqv(y, x))
+          0
+        else
+          -1
+      else
+        1
+    }
 
-    final def partialComparison(x: A, y: A): Option[Int] = {
+    override def partialComparison(x: A, y: A): Option[Int] = {
       Some(compare(x, y))
     }
 

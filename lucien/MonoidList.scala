@@ -11,7 +11,9 @@ object MonoidList {
     x ++ (y ++ z) == (x ++ y) ++ z
   }.holds
 
-  def listMonoid[T]: Monoid[List[T]] = new Monoid[List[T]] {
+  implicit def listMonoid[T]: Monoid[List[T]] = ListMonoid()
+
+  case class ListMonoid[T]() extends Monoid[List[T]] {
     def empty: List[T] = Nil[T]()
     def append(x: List[T], y: List[T]): List[T] = x ++ y
 

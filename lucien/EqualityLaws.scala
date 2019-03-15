@@ -12,7 +12,6 @@ object EqualityLaws {
    */
   abstract class Equality[A] {
     def eqv(x: A, y: A): Boolean
-    final def neqv(x: A, y: A): Boolean = !eqv(x, y)
 
     @law
     def law_reflexive_equality(x: A) = {

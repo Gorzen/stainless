@@ -3,6 +3,7 @@ import stainless.proof._
 import stainless.annotation._
 
 object TotalOrderNat {
+  import TotalOrderLaws._
 
   def law_antisymmetric_Nat(x: Nat, y: Nat): Boolean = {
     ((x <= y && y <= x) ==> (x == y)) because {
@@ -37,9 +38,15 @@ object TotalOrderNat {
     }
   }.holds
 
-  def natTotalOrder: TotalOrderLaws.TotalOrder[Nat] = new TotalOrderLaws.TotalOrder[Nat] {
-    def compare(x: Nat, y: Nat): Int = {
-      x compare y
+  implicit def natTotalOrder: TotalOrder[Nat] = NatTotalOrder()
+
+  case class NatTotalOrder() extends TotalOrder[Nat] {
+    def eqv(x: Nat, y: Nat): Boolean = {
+      x == y
+    }
+
+    def lteqv(x: Nat, y: Nat): Boolean = {
+      x <= y
     }
 
     override def law_connex_total_order(x: Nat, y: Nat): Boolean = {
@@ -48,10 +55,6 @@ object TotalOrderNat {
 
     override def law_transitive_partial_order(x: Nat, y: Nat, z: Nat): Boolean = {
       super.law_transitive_partial_order(x, y, z) because law_transitive_Nat(x, y, z)
-    }
-
-    override def law_reflexive_equality(x: Nat): Boolean = {
-      super.law_reflexive_equality(x) because (x == x)
     }
 
     override def law_antisymmetric_partial_order(x: Nat, y: Nat): Boolean = {

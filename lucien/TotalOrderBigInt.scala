@@ -3,14 +3,17 @@ import stainless.proof._
 import stainless.annotation._
 
 object TotalOrderBigInt {
-  def bigIntPartialOrder: TotalOrderLaws.TotalOrder[BigInt] = new TotalOrderLaws.TotalOrder[BigInt] {
-    def compare(x: BigInt, y: BigInt): Int = {
-      if(x < y)
-        -1
-      else if (x == y)
-        0
-      else
-        1
+  import TotalOrderLaws._
+
+  implicit def bigIntPartialOrder: TotalOrder[BigInt] = BigIntPartialOrder()
+
+  case class BigIntPartialOrder() extends TotalOrder[BigInt] {
+    def eqv(x: BigInt, y: BigInt): Boolean = {
+      x == y
+    }
+
+    def lteqv(x: BigInt, y: BigInt): Boolean = {
+      x <= y
     }
   }
 }

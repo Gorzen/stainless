@@ -5,7 +5,9 @@ import stainless.annotation._
 object MonoidOption {
   import MonoidLaws.Monoid
 
-  def optionMonoid[T](implicit monoid: Monoid[T]): Monoid[Option[T]] = new Monoid[Option[T]] {
+  implicit def optionMonoid[T](implicit ev: Monoid[T]): Monoid[Option[T]] = OptionMonoid(ev)
+
+  case class OptionMonoid[T](monoid: Monoid[T]) extends Monoid[Option[T]] {
     def empty: Option[T] = None[T]()
     def append(x: Option[T], y: Option[T]): Option[T] = {
       (x, y) match {

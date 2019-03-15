@@ -15,18 +15,20 @@ object PartialOrderLaws {
      * - zero     iff 'x == y'
      * - positive iff 'x > y'
      */
-    def partialComparison(x: A, y: A): Option[Int]
-
-    final def eqv(x: A, y: A): Boolean = {
-      partialComparison(x, y) == Some(0)
+    def partialComparison(x: A, y: A): Option[Int] = {
+      if(lteqv(x, y))
+        if(lteqv(y, x))
+          Some(0)
+        else
+          Some(-1)
+      else
+        if(lteqv(y, x))
+          Some(1)
+        else
+          None[Int]()
     }
 
-    final def lteqv(x: A, y: A): Boolean = {
-      partialComparison(x, y) match {
-        case Some(i) => i <= 0
-        case None() => false
-      }
-    }
+    def lteqv(x: A, y: A): Boolean
 
     @law
     def law_reflexive_partial_order(x: A) = {
