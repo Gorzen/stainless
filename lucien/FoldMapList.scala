@@ -8,27 +8,37 @@ object FoldMapList {
   import MonoidBigInt._
 
   def fold[A](xs: List[A])(implicit M: Monoid[A]): A = {
+    xs.foldLeft(M.empty)(M.append)
+  }
+
+  def foldR[A](xs: List[A])(implicit M: Monoid[A]): A = {
     xs.foldRight(M.empty)(M.append)
   }
 
   def foldMap[A, B](xs: List[A])(f: A => B)(implicit M: Monoid[B]): B = {
+    xs.foldLeft(M.empty)((b, a) => M.append(b, f(a)))
+  }
+
+  def foldMapR[A, B](xs: List[A])(f: A => B)(implicit M: Monoid[B]): B = {
     xs.foldRight(M.empty)((a, b) => M.append(f(a), b))
   }
 
+  // Basic sum implementation for testing purposes
   def sum(xs: List[BigInt]): BigInt = {
-    xs.foldRight(BigInt(0))(_ + _)
+    xs match  {
+      case Nil() => BigInt(0)
+      case Cons(y, ys) => y + sum(ys)
+    }
   }
-
-  def sum(xs: List[Sum[BigInt]]): BigInt = {
-    xs.foldRight(BigInt(0))((sum, int) => sum.toSum + int)
-  }
-
 
   @induct
   def lemma_foldLeft_foldRight[A](xs: List[A])(implicit M: Monoid[A]): Boolean = {
     xs match {
       case Nil() => true
-      case Cons(y, ys) => M.append(y, ys.foldLeft(M.empty)(M.append)) == ys.foldLeft(y)(M.append)
+      case Cons(y, ys) =>
+        assert(M.law_leftIdentity(y))
+        assert(M.law_rightIdentity(y))
+        M.append(y, ys.foldLeft(M.empty)(M.append)) == ys.foldLeft(y)(M.append)
     }
   }.holds
 
@@ -63,20 +73,28 @@ object FoldMapList {
   @induct
   def checkFoldFoldMap[A, B](xs: List[A])(f: A => B)(implicit M: Monoid[B]): Boolean = {
 
-    foldMap(xs)(f) == fold(xs.map(f))
+    foldMapR(xs)(f) == foldR(xs.map(f))
   }.holds
 
   @induct
   def checkFold(xs: List[BigInt]): Boolean = {
     implicit val monoid = bigIntSumMonoid2
 
-    sum(xs) == fold(xs.map(x => Sum(x))).toSum
+    sum(xs) == foldR(xs)
   }.holds
 
   @induct
   def checkFoldMap(xs: List[BigInt]): Boolean = {
     // implicit def from MonoidBigInt.scala is used in call
-    sum(xs) == foldMap(xs)(Sum(_)).toSum
+    sum(xs) == foldMapR(xs)(Sum(_)).toSum
+  }.holds
+
+  def foldEqualsFoldR[A](xs: List[A])(implicit M: Monoid[A]): Boolean = {
+    assert(fold(xs) == xs.foldLeft(M.empty)(M.append))
+    assert(checkFoldLeftFoldRight(xs))
+    assert(xs.foldRight(M.empty)(M.append) == foldR(xs))
+
+    check(fold(xs) == foldR(xs))
   }.holds
 
   // Define monoid for BigInt to check fold
