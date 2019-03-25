@@ -5,6 +5,25 @@ import stainless.collection._
 import conc.ConcRope._
 
 object FoldMapConcRope {
+  import Parallel._
+  import MonoidLaws._
+
+  def fold[A](xs: Conc[A])(implicit M: Monoid[A]): A = {
+    xs match {
+      case Empty() => M.empty
+      case Single(x) =>
+        (M.append(M.empty, x) == x) because M.law_leftIdentity(x)
+        x
+
+      // Maybe some trick to avoid duplication ?
+      case CC(left, right) =>
+        val (l, r) = parallel(fold(left), fold(right))
+        M.append(l, r)
+      case Append(left, right) =>
+        val (l, r) = parallel(fold(left), fold(right))
+        M.append(l, r)
+    }
+  }
 
   def concRopeFromList[A](xs: List[A]): Conc[A] = {
     xs match {
@@ -12,7 +31,7 @@ object FoldMapConcRope {
       case Cons(y, ys) => append(concRopeFromList(ys), y)
     }
   } /*ensuring { res =>
-    // Doesn't work yet for some reason, even though I proved it
+    // Can't do it like this (non terminating function)
     assert(proof_concRopeFromList(xs))
     res.toList == xs.reverse
   }*/
@@ -83,5 +102,17 @@ object FoldMapConcRope {
         }.qed
       }
     }
+  }.holds
+
+  //TODO ?
+  def proof_fold1[A](xs: Conc[A])(implicit M: Monoid[A]): A = {
+    //fold(xs) == fold(xs.toList)
+    true
+  }.holds
+
+  //TODO ?
+  def proof_fold2[A](xs: List[A])(implicit M: Monoid[A]): A = {
+    //fold(xs) == fold(concRopeFromList(xs))
+    true
   }.holds
 }
