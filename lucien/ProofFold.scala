@@ -26,20 +26,6 @@ object ProofFold {
           M.append(y, Nil[A]().foldRight(M.empty)(M.append))  ==| trivial                  |
           Cons(y, Nil[A]()).foldRight(M.empty)(M.append)
         }.qed
-        // Can have StackOverflow
-        /*case Cons(y1, Cons(y2, ys)) => {
-          (y1 :: y2 :: ys).foldLeft(M.empty)(M.append)                  ==| trivial                                                       |
-          (y2 :: ys).foldLeft(M.append(M.empty, y1))(M.append)          ==| M.law_leftIdentity(y1)                                        |
-          (y2 :: ys).foldLeft(y1)(M.append)                             ==| trivial                                                       |
-          ys.foldLeft(M.append(y1, y2))(M.append)                       ==| M.law_leftIdentity(M.append(y1, y2))                          |
-          ys.foldLeft(M.append(M.empty, M.append(y1, y2)))(M.append)    ==| trivial                                                       |
-          (M.append(y1, y2) :: ys).foldLeft(M.empty)(M.append)          ==| foldLeftEqualsFoldRight(Cons(M.append(y1, y2), ys))           |
-          (M.append(y1, y2) :: ys).foldRight(M.empty)(M.append)         ==| trivial                                                       |
-          M.append(M.append(y1, y2), ys.foldRight(M.empty)(M.append))   ==| M.law_associativity(y1, y2, ys.foldRight(M.empty)(M.append))  |
-          M.append(y1, M.append(y2, ys.foldRight(M.empty)(M.append)))   ==| trivial                                                       |
-          M.append(y1, (y2 :: ys).foldRight(M.empty)(M.append))         ==| trivial                                                       |
-          (y1 :: y2 :: ys).foldRight(M.empty)(M.append)
-        }.qed*/
         case Cons(y1, Cons(y2, ys)) =>
           assert((y1 :: y2 :: ys).foldLeft(M.empty)(M.append) == (y2 :: ys).foldLeft(M.append(M.empty, y1))(M.append))
           assert(M.law_leftIdentity(y1))
