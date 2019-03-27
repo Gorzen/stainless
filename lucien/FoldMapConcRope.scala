@@ -95,6 +95,7 @@ object FoldMapConcRope {
   }.holds
 
   def proof_fold[A](xs: Conc[A])(implicit M: Monoid[A]): Boolean = {
+    decreases(xs.level)
     (fold(xs) == foldL(xs.toList)) because {
       xs match {
         case Empty() =>
@@ -114,32 +115,36 @@ object FoldMapConcRope {
         case CC(left, right) =>
           val (l, r) = parallel(fold(left), fold(right))
           assert(fold(CC(left, right)) == M.append(l, r))
-          assert(l == fold(left))
-          assert(r == fold(right))
-          assert(M.append(l, r) == M.append(fold(left), fold(right)))
-          assert(proof_fold(left))
-          assert(M.append(fold(left), fold(right)) == M.append(foldL(left.toList), fold(right)))
-          assert(proof_fold(right))
-          assert(M.append(foldL(left.toList), fold(right)) == M.append(foldL(left.toList), foldL(right.toList)))
-          assert(proof_foldConcat(left.toList, right.toList))
-          assert(M.append(foldL(left.toList), foldL(right.toList)) == foldL(left.toList ++ right.toList))
+          assert(proof_helper(xs, left, right, l, r))
           assert(foldL(left.toList ++ right.toList) == foldL(CC(left, right).toList))
           check(fold(CC(left, right)) == foldL(CC(left, right).toList))
         case Append(left, right) =>
           val (l, r) = parallel(fold(left), fold(right))
           assert(fold(Append(left, right)) == M.append(l, r))
-          assert(l == fold(left))
-          assert(r == fold(right))
-          assert(M.append(l, r) == M.append(fold(left), fold(right)))
-          assert(proof_fold(left))
-          assert(M.append(fold(left), fold(right)) == M.append(foldL(left.toList), fold(right)))
-          assert(proof_fold(right))
-          assert(M.append(foldL(left.toList), fold(right)) == M.append(foldL(left.toList), foldL(right.toList)))
-          assert(proof_foldConcat(left.toList, right.toList))
-          assert(M.append(foldL(left.toList), foldL(right.toList)) == foldL(left.toList ++ right.toList))
+          assert(proof_helper(xs, left, right, l, r))
           assert(foldL(left.toList ++ right.toList) == foldL(Append(left, right).toList))
           check(fold(Append(left, right)) == foldL(Append(left, right).toList))
       }
+    }
+  }.holds
+
+  @inlineOnce
+  def proof_helper[A](x: Conc[A], left: Conc[A], right: Conc[A], l: A, r: A)(implicit M: Monoid[A]): Boolean = {
+    require((l, r) == parallel(fold(left), fold(right)) && (x == Append(left, right) || x == CC(left, right)))
+
+    (M.append(l, r) == foldL(left.toList ++ right.toList)) because {
+      assert(l == fold(left))
+      assert(r == fold(right))
+      assert(M.append(l, r) == M.append(fold(left), fold(right)))
+
+      assert(proof_fold(left))
+      assert(proof_fold(right))
+      assert(M.append(fold(left), fold(right)) == M.append(foldL(left.toList), foldL(right.toList)))
+
+      assert(proof_foldConcat(left.toList, right.toList))
+      assert(M.append(foldL(left.toList), foldL(right.toList)) == foldL(left.toList ++ right.toList))
+
+      check(M.append(l, r) == foldL(left.toList ++ right.toList))
     }
   }.holds
 
