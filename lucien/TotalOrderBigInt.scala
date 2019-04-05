@@ -5,9 +5,9 @@ import stainless.annotation._
 object TotalOrderBigInt {
   import TotalOrderLaws._
 
-  implicit def bigIntPartialOrder: TotalOrder[BigInt] = BigIntPartialOrder()
+  implicit def bigIntTotalOrder: TotalOrder[BigInt] = BigIntTotalOrder()
 
-  case class BigIntPartialOrder() extends TotalOrder[BigInt] {
+  case class BigIntTotalOrder() extends TotalOrder[BigInt] {
     def eqv(x: BigInt, y: BigInt): Boolean = {
       x == y
     }
