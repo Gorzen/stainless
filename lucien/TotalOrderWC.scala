@@ -13,7 +13,7 @@ object TotalOrderWC {
     }
 
     def lteqv(x: (String, BigInt), y: (String, BigInt)): Boolean = {
-      x._2 <= y._2
+      y._2 <= x._2
     }
   }
 }

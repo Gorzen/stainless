@@ -24,17 +24,27 @@ object Main {
 
     // Scala list to stainless list?
     val wordsStd = Source.fromFile(args(0)).getLines.flatMap(line => line.split(' ')).toList
+    val uniqueWordsStd = wordsStd.toSet
 
     var wordsV: List[String] = Nil[String]()
     for (e <- wordsStd){
       wordsV = Cons(e, wordsV)
     }
 
-    val words: List[String] = wordsV.reverse
+    var uniqueWordsV: List[String] = Nil[String]()
+    for(e <- uniqueWordsStd){
+      uniqueWordsV = Cons(e, uniqueWordsV)
+    }
+
+    // This list is reversed, but it doesn't matter if we count words
+    val words: List[String] = wordsV
+    var uniqueWords: List[String] = uniqueWordsV
 
     println("Starting word count for file '" + args(0) + "' in " + (if(parallel) "parallel" else "sequential") + " mode with " + (if(merge) "merge" else "insertion") + " sort.")
 
     val list: List[WC] = words.map(s => WC(MMap.singleton(s)))
+
+    println("Finish map, start fold")
 
     val wc: WC = if(parallel){
       foldC(concRopeFromList(list))(WordCountMonoid())
@@ -42,13 +52,20 @@ object Main {
       foldL(list)(WordCountMonoid())
     }
 
-    val wordCount: List[(String, BigInt)] = words.unique.map(s => (s, wc.words.apply(s)))
+    println("Finish fold, start retrieving list")
+
+    val wordCount: List[(String, BigInt)] = uniqueWords.map(s => (s, wc.words.apply(s)))
+
+    println("Finish retrieving list, start sorting")
 
     val sortedWordCount = if(merge){
-      mSort(wordCount)
+      //mSort(wordCount)
+      wordCount
     }else{
       iSort(wordCount)
     }
+
+    println("Finish sorting, start printing")
 
     print(List.mkString(sortedWordCount, "\n", (x: (String, BigInt)) => x._1 + " => " + x._2))
   }

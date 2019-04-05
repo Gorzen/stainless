@@ -1,0 +1,403 @@
+******The Project Gutenberg Etext of The Call of the Wild*******
+******This file should be named callw10.txt or callw10.zip******
+
+Please take a look at the important information in this header.
+We encourage you to keep this file on your own disk, keeping an
+electronic path open for the next readers.  Do not remove this.
+
+
+**Welcome To The World of Free Plain Vanilla Electronic Texts**
+
+**Etexts Readable By Both Humans and By Computers, Since 1971**
+
+*These Etexts Prepared By Hundreds of Volunteers and Donations*
+
+Information on contacting Project Gutenberg to get Etexts, and
+further information is included below.  We need your donations.
+
+
+The Call of the Wild, by Jack London
+
+February 1995  [Etext #215]
+
+******The Project Gutenberg Etext of The Call of the Wild*******
+******This file should be named callw10.txt or callw10.zip******
+
+Corrected EDITIONS of our etexts get a new NUMBER, callw11.txt
+VERSIONS based on separate sources get new LETTER, callw10a.txt
+
+Etext produced by Ryan, Kirstin, Linda and Rick Trapp
+In loving memory of Ivan Louis Reese
+
+The equipment: a Compaq 486/33, a Hewlett-Packard ScanJet
+IIc flatbed scanner; and Calera Word Scan Plus
+
+The official release date of all Project Gutenberg Etexts is at
+Midnight, Central Time, of the last day of the stated month.  A
+preliminary version may often be posted for suggestion, comment
+and editing by those who wish to do so.  To be sure you have an
+up to date first edition [xxxxx10x.xxx] please check file sizes
+in the first week of the next month.  Since our ftp program has
+a bug in it that scrambles the date [tried to fix and failed] a
+look at the file size will have to do, but we will try to see a
+new copy has at least one byte more or less.
+
+
+Information about Project Gutenberg (one page)
+
+We produce about two million dollars for each hour we work.  The
+fifty hours is one conservative estimate for how long it we take
+to get any etext selected, entered, proofread, edited, copyright
+searched and analyzed, the copyright letters written, etc.  This
+projected audience is one hundred million readers.  If our value
+per text is nominally estimated at one dollar, then we produce 2
+million dollars per hour this year we, will have to do four text
+files per month:  thus upping our productivity from one million.
+The Goal of Project Gutenberg is to Give Away One Trillion Etext
+Files by the December 31, 2001.  [10,000 x 100,000,000=Trillion]
+This is ten thousand titles each to one hundred million readers,
+which is 10% of the expected number of computer users by the end
+of the year 2001.
+
+We need your donations more than ever!
+
+All donations should be made to "Project Gutenberg/IBC", and are
+tax deductible to the extent allowable by law ("IBC" is Illinois
+Benedictine College).  (Subscriptions to our paper newsletter go
+to IBC, too)
+
+For these and other matters, please mail to:
+
+Project Gutenberg
+P. O. Box  2782
+Champaign, IL 61825
+
+When all other email fails try our Michael S. Hart, Executive
+Director:
+hart@vmd.cso.uiuc.edu (internet)   hart@uiucvmd   (bitnet)
+
+We would prefer to send you this information by email
+(Internet, Bitnet, Compuserve, ATTMAIL or MCImail).
+
+******
+If you have an FTP program (or emulator), please
+FTP directly to the Project Gutenberg archives:
+[Mac users, do NOT point and click. . .type]
+
+ftp mrcnext.cso.uiuc.edu
+login:  anonymous
+password:  your@login
+cd etext/etext91
+or cd etext92
+or cd etext93 [for new books]  [now also in cd etext/etext93]
+or cd etext/articles [get suggest gut for more information]
+dir [to see files]
+get or mget [to get files. . .set bin for zip files]
+get INDEX100.GUT
+get INDEX200.GUT
+for a list of books
+and
+get NEW.GUT for general information
+and
+mget GUT* for newsletters.
+
+**Information prepared by the Project Gutenberg legal advisor**
+(Three Pages)
+
+
+***START**THE SMALL PRINT!**FOR PUBLIC DOMAIN ETEXTS**START***
+Why is this "Small Print!" statement here?  You know: lawyers.
+They tell us you might sue us if there is something wrong with
+your copy of this etext, even if you got it for free from
+someone other than us, and even if what's wrong is not our
+fault.  So, among other things, this "Small Print!" statement
+disclaims most of our liability to you.  It also tells you how
+you can distribute copies of this etext if you want to.
+
+*BEFORE!* YOU USE OR READ THIS ETEXT
+By using or reading any part of this PROJECT GUTENBERG-tm
+etext, you indicate that you understand, agree to and accept
+this "Small Print!" statement.  If you do not, you can receive
+a refund of the money (if any) you paid for this etext by
+sending a request within 30 days of receiving it to the person
+you got it from.  If you received this etext on a physical
+medium (such as a disk), you must return it with your request.
+
+ABOUT PROJECT GUTENBERG-TM ETEXTS
+This PROJECT GUTENBERG-tm etext, like most PROJECT GUTENBERG-
+tm etexts, is a "public domain" work distributed by Professor
+Michael S. Hart through the Project Gutenberg Association at
+Illinois Benedictine College (the "Project").  Among other
+things, this means that no one owns a United States copyright
+on or for this work, so the Project (and you!) can copy and
+distribute it in the United States without permission and
+without paying copyright royalties.  Special rules, set forth
+below, apply if you wish to copy and distribute this etext
+under the Project's "PROJECT GUTENBERG" trademark.
+
+To create these etexts, the Project expends considerable
+efforts to identify, transcribe and proofread public domain
+works.  Despite these efforts, the Project's etexts and any
+medium they may be on may contain "Defects".  Among other
+things, Defects may take the form of incomplete, inaccurate or
+corrupt data, transcription errors, a copyright or other
+intellectual property infringement, a defective or damaged
+disk or other etext medium, a computer virus, or computer
+codes that damage or cannot be read by your equipment.
+
+LIMITED WARRANTY; DISCLAIMER OF DAMAGES
+But for the "Right of Replacement or Refund" described below,
+[1] the Project (and any other party you may receive this
+etext from as a PROJECT GUTENBERG-tm etext) disclaims all
+liability to you for damages, costs and expenses, including
+legal fees, and [2] YOU HAVE NO REMEDIES FOR NEGLIGENCE OR
+UNDER STRICT LIABILITY, OR FOR BREACH OF WARRANTY OR CONTRACT,
+INCLUDING BUT NOT LIMITED TO INDIRECT, CONSEQUENTIAL, PUNITIVE
+OR INCIDENTAL DAMAGES, EVEN IF YOU GIVE NOTICE OF THE
+POSSIBILITY OF SUCH DAMAGES.
+
+If you discover a Defect in this etext within 90 days of
+receiving it, you can receive a refund of the money (if any)
+you paid for it by sending an explanatory note within that
+time to the person you received it from.  If you received it
+on a physical medium, you must return it with your note, and
+such person may choose to alternatively give you a replacement
+copy.  If you received it electronically, such person may
+choose to alternatively give you a second opportunity to
+receive it electronically.
+
+THIS ETEXT IS OTHERWISE PROVIDED TO YOU "AS-IS".  NO OTHER
+WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, ARE MADE TO YOU AS
+TO THE ETEXT OR ANY MEDIUM IT MAY BE ON, INCLUDING BUT NOT
+LIMITED TO WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A
+PARTICULAR PURPOSE.
+
+Some states do not allow disclaimers of implied warranties or
+the exclusion or limitation of consequential damages, so the
+above disclaimers and exclusions may not apply to you, and you
+may have other legal rights.
+
+INDEMNITY
+You will indemnify and hold the Project, its directors,
+officers, members and agents harmless from all liability, cost
+and expense, including legal fees, that arise directly or
+indirectly from any of the following that you do or cause:
+[1] distribution of this etext, [2] alteration, modification,
+or addition to the etext, or [3] any Defect.
+
+DISTRIBUTION UNDER "PROJECT GUTENBERG-tm"
+You may distribute copies of this etext electronically, or by
+disk, book or any other medium if you either delete this
+"Small Print!" and all other references to Project Gutenberg,
+or:
+
+[1]  Only give exact copies of it.  Among other things, this
+     requires that you do not remove, alter or modify the
+     etext or this "small print!" statement.  You may however,
+     if you wish, distribute this etext in machine readable
+     binary, compressed, mark-up, or proprietary form,
+     including any form resulting from conversion by word pro-
+     cessing or hypertext software, but only so long as
+     *EITHER*:
+
+     [*]  The etext, when displayed, is clearly readable, and
+          does *not* contain characters other than those
+          intended by the author of the work, although tilde
+          (~), asterisk (*) and underline (_) characters may
+          be used to convey punctuation intended by the
+          author, and additional characters may be used to
+          indicate hypertext links; OR
+
+     [*]  The etext may be readily converted by the reader at
+          no expense into plain ASCII, EBCDIC or equivalent
+          form by the program that displays the etext (as is
+          the case, for instance, with most word processors);
+          OR
+
+     [*]  You provide, or agree to also provide on request at
+          no additional cost, fee or expense, a copy of the
+          etext in its original plain ASCII form (or in EBCDIC
+          or other equivalent proprietary form).
+
+[2]  Honor the etext refund and replacement provisions of this
+     "Small Print!" statement.
+
+[3]  Pay a trademark license fee to the Project of 20% of the
+     net profits you derive calculated using the method you
+     already use to calculate your applicable taxes.  If you
+     don't derive profits, no royalty is due.  Royalties are
+     payable to "Project Gutenberg Association / Illinois
+     Benedictine College" within the 60 days following each
+     date you prepare (or were legally required to prepare)
+     your annual (or equivalent periodic) tax return.
+
+WHAT IF YOU *WANT* TO SEND MONEY EVEN IF YOU DON'T HAVE TO?
+The Project gratefully accepts contributions in money, time,
+scanning machines, OCR software, public domain etexts, royalty
+free copyright licenses, and every other sort of contribution
+you can think of.  Money should be paid to "Project Gutenberg
+Association / Illinois Benedictine College".
+
+This "Small Print!" by Charles B. Kramer, Attorney
+Internet (72600.2026@compuserve.com); TEL: (212-254-5093)
+*END*THE SMALL PRINT! FOR PUBLIC DOMAIN ETEXTS*Ver.04.29.93*END*
+
+
+
+
+
+
+The Call of the Wild
+by Jack London
+
+
+
+
+      Contents
+
+I     Into the Primitive
+II    The Law of Club and Fang
+III   The Dominant Primordial Beast
+IV    Who Has Won to Mastership
+V     The Toil of Trace and Tail
+VI    For the Love of a Man
+VII   The Sounding of the Call
+
+
+
+
+Chapter I
+
+Into the Primitive
+
+
+         "Old longings nomadic leap,
+          Chafing at custom's chain;
+          Again from its brumal sleep
+          Wakens the ferine strain." 
+
+Buck did not read the newspapers, or he would have known that 
+trouble was brewing, not alone for himself, but for every tide-
+water dog, strong of muscle and with warm, long hair, from Puget 
+Sound to San Diego.  Because men, groping in the Arctic darkness, 
+had found a yellow metal, and because steamship and transportation 
+companies were booming the find, thousands of men were rushing 
+into the Northland.  These men wanted dogs, and the dogs they 
+wanted were heavy dogs, with strong muscles by which to toil, and 
+furry coats to protect them from the frost. 
+
+Buck lived at a big house in the sun-kissed Santa Clara Valley.  
+Judge Miller's place, it was called.  It stood back from the road, 
+half hidden among the trees, through which glimpses could be 
+caught of the wide cool veranda that ran around its four sides.  
+The house was approached by gravelled driveways which wound about 
+through wide-spreading lawns and under the interlacing boughs of 
+tall poplars.  At the rear things were on even a more spacious 
+scale than at the front.  There were great stables, where a dozen 
+grooms and boys held forth, rows of vine-clad servants' cottages, 
+an endless and orderly array of outhouses, long grape arbors, 
+green pastures, orchards, and berry patches.  Then there was the 
+pumping plant for the artesian well, and the big cement tank where 
+Judge Miller's boys took their morning plunge and kept cool in the 
+hot afternoon. 
+
+And over this great demesne Buck ruled.  Here he was born, and 
+here he had lived the four years of his life.  It was true, there 
+were other dogs, There could not but be other dogs on so vast a 
+place, but they did not count.  They came and went, resided in the 
+populous kennels, or lived obscurely in the recesses of the house 
+after the fashion of Toots, the Japanese pug, or Ysabel, the 
+Mexican hairless,--strange creatures that rarely put nose out of 
+doors or set foot to ground. On the other hand, there were the fox 
+terriers, a score of them at least, who yelped fearful promises at 
+Toots and Ysabel looking out of the windows at them and protected 
+by a legion of housemaids armed with brooms and mops. 
+
+But Buck was neither house-dog nor kennel-dog.  The whole realm 
+was his.  He plunged into the swimming tank or went hunting with 
+the Judge's sons; he escorted Mollie and Alice, the Judge's 
+daughters, on long twilight or early morning rambles; on wintry 
+nights he lay at the Judge's feet before the roaring library fire; 
+he carried the Judge's grandsons on his back, or rolled them in 
+the grass, and guarded their footsteps through wild adventures 
+down to the fountain in the stable yard, and even beyond, where 
+the paddocks were, and the berry patches.  Among the terriers he 
+stalked imperiously, and Toots and Ysabel he utterly ignored, for 
+he was king,--king over all creeping, crawling, flying things of 
+Judge Miller's place, humans included. 
+
+His father, Elmo, a huge St.  Bernard, had been the Judge's 
+inseparable companion, and Buck bid fair to follow in the way of 
+his father.  He was not so large,--he weighed only one hundred and 
+forty pounds,--for his mother, Shep, had been a Scotch shepherd 
+dog.  Nevertheless, one hundred and forty pounds, to which was 
+added the dignity that comes of good living and universal respect, 
+enabled him to carry himself in right royal fashion.  During the 
+four years since his puppyhood he had lived the life of a sated 
+aristocrat; he had a fine pride in himself, was even a trifle 
+egotistical, as country gentlemen sometimes become because of 
+their insular situation.  But he had saved himself by not becoming 
+a mere pampered house-dog.  Hunting and kindred outdoor delights 
+had kept down the fat and hardened his muscles; and to him, as to 
+the cold-tubbing races, the love of water had been a tonic and a 
+health preserver. 
+
+And this was the manner of dog Buck was in the fall of 1897, when 
+the Klondike strike dragged men from all the world into the frozen 
+North.  But Buck did not read the newspapers, and he did not know 
+that Manuel, one of the gardener's helpers, was an undesirable 
+acquaintance.  Manuel had one besetting sin.  He loved to play 
+Chinese lottery.  Also, in his gambling, he had one besetting 
+weakness--faith in a system; and this made his damnation certain.  
+For to play a system requires money, while the wages of a 
+gardener's helper do not lap over the needs of a wife and numerous 
+progeny. 
+
+The Judge was at a meeting of the Raisin Growers' Association, and 
+the boys were busy organizing an athletic club, on the memorable 
+night of Manuel's treachery.  No one saw him and Buck go off 
+through the orchard on what Buck imagined was merely a stroll.  
+And with the exception of a solitary man, no one saw them arrive 
+at the little flag station known as College Park.  This man talked 
+with Manuel, and money chinked between them. 
+
+"You might wrap up the goods before you deliver 'm," the stranger 
+said gruffly, and Manuel doubled a piece of stout rope around 
+Buck's neck under the collar. 
+
+"Twist it, an' you'll choke 'm plentee," said Manuel, and the 
+stranger grunted a ready affirmative. 
+
+Buck had accepted the rope with quiet dignity.  To be sure, it was 
+an unwonted performance: but he had learned to trust in men he 
+knew, and to give them credit for a wisdom that outreached his 
+own.  But when the ends of the rope were placed in the stranger's 
+hands, he growled menacingly.  He had merely intimated his 
+displeasure, in his pride believing that to intimate was to 
+command.  But to his surprise the rope tightened around his neck, 
+shutting off his breath.  In quick rage he sprang at the man, who 
+met him halfway, grappled him close by the throat, and with a deft 
+twist threw him over on his back.  Then the rope tightened 
+mercilessly, while Buck struggled in a fury, his tongue lolling 
+out of his mouth and his great chest panting futilely.  Never in 
+all his life had he been so vilely treated, and never in all his 
+life had he been so angry.  But his strength ebbed, his eyes 
+glazed, and he knew nothing when the train was flagged and the two 
+men threw him into the baggage car. 
+
+The next he knew, he was dimly aware that his tongue was hurting 
+and that he was being jolted along in some kind of a conveyance.  
+The hoarse shriek of a locomotive whistling a crossing told him 
+where he was.  He had travelled too often with the Judge not to 
+know the sensation of riding in a baggage car.  He opened his 
+eyes, and into them came the unbridled anger of a kidnapped king.  
+The man sprang for his throat, but Buck was too quick for him.  
+His jaws closed on the hand, nor did they relax till his senses 
+were choked out of him once more. 
+
+"Yep, has fits," the man said, hiding his mangled hand from the 
+baggageman, who had been attracted by the sounds of struggle.  
+"I'm takin' 'm up for the boss to 'Frisco.  A crack dog-doctor 
+there thinks that he can cure 'm." 
+
+rent babel.
