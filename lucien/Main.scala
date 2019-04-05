@@ -20,7 +20,8 @@ object Main {
     val parallel = if((args.length >= 2 && args(1) == "p") || (args.length >= 3 && args(2) == "p")) true else false
     val merge = if((args.length >= 2 && args(1) == "m") || (args.length >= 3 && args(2) == "m")) true else false
 
-    val words: List[String] = Source.fromFile(args(0)).getLines.flatMap(line => line.split(' '))
+    // Scala list to stainless list?
+    val words: List[String] = List(Source.fromFile(args(0)).getLines.flatMap(line => line.split(' ')))
 
     println("Starting word count for file '" + args(0) + "' in " + (if(parallel) "parallel" else "sequential") + " mode with " + (if(merge) "merge" else "insertion") + " sort.")
 
