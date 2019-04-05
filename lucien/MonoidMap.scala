@@ -5,26 +5,32 @@ import stainless.annotation._
 object MonoidMap {
   import MonoidLaws._
 
-  case class MMap[A, B](f: A => B) {
+  case class monoidSum() extends Monoid[BigInt] {
+    def empty: BigInt = BigInt(0)
+    def append(x: BigInt, y: BigInt): BigInt = x + y
+  }
 
-    def apply(k: A): B = {
+  case class MMap(f: String => BigInt) {
+
+    def apply(k: String): BigInt = {
       f(k)
     }
 
-    def updated(k: A, v: B): MMap[A, B] = {
-      MMap((x: A) => if (x == k) v else f(x))
+    def updated(k: String, v: BigInt): MMap = {
+      MMap((x: String) => if (x == k) v else f(x))
     }
 
-    def merge(that: MMap[A, B])(implicit M: Monoid[B]): MMap[A, B] = {
-      MMap[A, B] { i =>
+    def merge(that: MMap): MMap = {
+      MMap { i =>
         val x = this.apply(i)
         val y = that.apply(i)
-        M.append(x, y)
+        monoidSum().append(x, y)
       }
     }
   }
 
   object MMap {
-    def empty[A, B](implicit M: Monoid[B]): MMap[A, B] = MMap((k: A) => M.empty)
+    def empty: MMap = MMap((k: String) => monoidSum().empty)
+    def singleton(x: String) = empty.updated(x, BigInt(1))
   }
 }
