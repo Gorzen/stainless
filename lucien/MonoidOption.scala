@@ -20,11 +20,10 @@ object MonoidOption {
 
     override def law_associativity(x: Option[T], y: Option[T], z: Option[T]): Boolean = {
       super.law_associativity(x, y, z) because {
-        (x, y, z) match {
-          case(Some(a), Some(b), Some(c)) =>
-            check(monoid.law_associativity(a, b, c))
-          case _ => true
-        }
+        if(x.nonEmpty && y.nonEmpty && z.nonEmpty)
+          check(monoid.law_associativity(x.get, y.get, z.get))
+        else
+          true
       }
     }
   }
