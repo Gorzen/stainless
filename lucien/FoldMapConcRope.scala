@@ -14,8 +14,8 @@ object FoldMapConcRope {
     xs match {
       case Empty() => M.empty
       case Single(x) =>
-        assert(M.law_leftIdentity(x))
-        assert(M.append(M.empty, x) == x)
+        //assert(M.law_leftIdentity(x))
+        //assert(M.append(M.empty, x) == x)
         x
       case CC(left, right) =>
         val (l, r) = parallel(fold(left), fold(right))

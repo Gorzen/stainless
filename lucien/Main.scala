@@ -21,6 +21,7 @@ object Main {
 
     val parallel = if((args.length >= 2 && args(1) == "p") || (args.length >= 3 && args(2) == "p")) true else false
     val merge = if((args.length >= 2 && args(1) == "m") || (args.length >= 3 && args(2) == "m")) true else false
+    val noSort = if((args.length >= 2 && args(1) == "n") || (args.length >= 3 && args(2) == "n")) true else false
 
     // Scala list to stainless list?
     val wordsStd = Source.fromFile(args(0)).getLines.flatMap(line => line.split(' ')).toList
@@ -40,7 +41,7 @@ object Main {
     val words: List[String] = wordsV
     var uniqueWords: List[String] = uniqueWordsV
 
-    println("Starting word count for file '" + args(0) + "' in " + (if(parallel) "parallel" else "sequential") + " mode with " + (if(merge) "merge" else "insertion") + " sort.")
+    println("Starting word count for file '" + args(0) + "' in " + (if(parallel) "parallel" else "sequential") + " mode with " + (if(noSort) "no" else if(merge) "merge" else "insertion") + " sort.")
 
     val list: List[WC] = words.map(s => WC(MMap.singleton(s)))
 
@@ -58,11 +59,12 @@ object Main {
 
     println("Finish retrieving list, start sorting")
 
-    val sortedWordCount = if(merge){
-      //mSort(wordCount)
+    val sortedWordCount = if(noSort) {
       wordCount
-    }else{
-      iSort(wordCount)
+    } else if(merge) {
+      mSort(wordCount)(WCTotalOrder())
+    } else {
+      iSort(wordCount)(WCTotalOrder())
     }
 
     println("Finish sorting, start printing")

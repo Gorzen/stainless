@@ -8,6 +8,8 @@ object WordCount {
 
   case class WC(words: MMap)
 
+  implicit def wordCountMonoid(): Monoid[WC] = WordCountMonoid()
+
   case class WordCountMonoid() extends Monoid[WC] {
     def empty: WC = WC(MMap.empty)
 
