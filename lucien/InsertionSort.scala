@@ -1,6 +1,7 @@
 import stainless.collection._
 import stainless.lang._
 import stainless.proof._
+import stainless.lang.StaticChecks._
 
 object InsertionSort {
   import TotalOrderLaws.TotalOrder

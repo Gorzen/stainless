@@ -2,6 +2,7 @@ import stainless.lang._
 import stainless.proof._
 import stainless.annotation._
 import stainless.collection._
+import stainless.lang.StaticChecks._
 import conc.ConcRope._
 
 object FoldMapConcRope {
@@ -11,26 +12,30 @@ object FoldMapConcRope {
   import ProofFold._
 
   def fold[A](xs: Conc[A])(implicit M: Monoid[A]): A = {
+  println("fold xs => " + xs.size)
     xs match {
       case Empty() => M.empty
       case Single(x) =>
-        //assert(M.law_leftIdentity(x))
-        //assert(M.append(M.empty, x) == x)
+        assert(M.law_leftIdentity(x))
+        assert(M.append(M.empty, x) == x)
         x
       case CC(left, right) =>
-        val (l, r) = parallel(fold(left), fold(right))
+        val (l, r) = (fold(left), fold(right))
         M.append(l, r)
       case Append(left, right) =>
-        val (l, r) = parallel(fold(left), fold(right))
+        val (l, r) = (fold(left), fold(right))
         M.append(l, r)
     }
   }
 
   def concRopeFromList[A](xs: List[A]): Conc[A] = {
-    xs match {
-      case Nil() => Empty[A]()
-      case Cons(y, ys) => append(concRopeFromList(ys), y)
+    xs.foldLeft(Empty[A](): Conc[A]) { case (acc, x) =>
+      append(acc, x)
     }
+    // xs match {
+    //   case Nil() => Empty[A]()
+    //   case Cons(y, ys) => append(concRopeFromList(ys), y)
+    // }
   }
 
   def proof_concRopeFromList[A](xs: List[A]): Boolean = {

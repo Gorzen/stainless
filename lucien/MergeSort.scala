@@ -1,6 +1,7 @@
 import stainless.collection._
 import stainless.lang._
 import stainless.proof._
+import stainless.lang.StaticChecks._
 
 object MergeSort {
   import TotalOrderLaws.TotalOrder
@@ -11,7 +12,7 @@ object MergeSort {
   }
 
   def sort[T](l: List[T])(implicit comparator: TotalOrder[T]): List[T] =  {
-    decreases(l.size)
+    // decreases(l.size)
     l match {
       case x1 :: x2 :: xs =>
         val (left, right) = split(l)

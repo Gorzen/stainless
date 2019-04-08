@@ -24,11 +24,19 @@ object Main {
     val noSort = if((args.length >= 2 && args(1) == "n") || (args.length >= 3 && args(2) == "n")) true else false
 
     // Scala list to stainless list?
-    val wordsStd = Source.fromFile(args(0)).getLines.flatMap(line => line.split(' ')).toList
+    val wordsStd = Source.fromFile(args(0))
+      .getLines
+      .flatMap(line => line.split(' '))
+      .map(_.trim)
+      .filterNot(_.isEmpty)
+      .toList
+
     val uniqueWordsStd = wordsStd.toSet
 
-    var wordsV: List[String] = Nil[String]()
-    for (e <- wordsStd){
+    val words = wordsStd.map(s => WC(Bag((s, BigInt(1)))))
+
+    var wordsV: List[WC] = Nil[WC]()
+    for (e <- words){
       wordsV = Cons(e, wordsV)
     }
 
@@ -38,12 +46,12 @@ object Main {
     }
 
     // This list is reversed, but it doesn't matter if we count words
-    val words: List[String] = wordsV
+    //val words: List[String] = wordsV
     var uniqueWords: List[String] = uniqueWordsV
 
     println("Starting word count for file '" + args(0) + "' in " + (if(parallel) "parallel" else "sequential") + " mode with " + (if(noSort) "no" else if(merge) "merge" else "insertion") + " sort.")
 
-    val list: List[WC] = words.map(s => WC(MMap.singleton(s)))
+    val list: List[WC] = wordsV
 
     println("Finish map, start fold")
 
@@ -55,7 +63,12 @@ object Main {
 
     println("Finish fold, start retrieving list")
 
-    val wordCount: List[(String, BigInt)] = uniqueWords.map(s => (s, wc.words.apply(s)))
+    val wordCount: List[(String, BigInt)] = uniqueWords
+      .foldLeft(List[(String, BigInt)]()) { case (acc, w) =>
+        Cons((w, wc.words(w)), acc)
+      }
+
+    //.map(s => (s, wc.words.apply(s)))
 
     println("Finish retrieving list, start sorting")
 

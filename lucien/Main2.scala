@@ -1,7 +1,7 @@
 import scala.io.Source
 
-object Main {
-  def main(args: Array[String]): Unit = {
+object Main2 {
+  def main2(args: Array[String]): Unit = {
     assert(args.length >= 1 && args.size <= 3)
 
     val parallel = if((args.length >= 2 && args(1) == "p") || (args.length >= 3 && args(2) == "p")) true else false

@@ -58,7 +58,7 @@ package object lang {
   @ignore def choose[A,B,C,D](predicate: (A,B,C,D) => Boolean): (A,B,C,D) = sys.error("Can't execute non-deterministic choose")
   @ignore def choose[A,B,C,D,E](predicate: (A,B,C,D,E) => Boolean): (A,B,C,D,E) = sys.error("Can't execute non-deterministic choose")
 
-  @ignore def decreases(@ghost r1: BigInt): Unit = ()
+  @ignore def decreases(@ghost r1: => BigInt): Unit = ()
   @ignore def decreases(@ghost r1: BigInt, @ghost r2: BigInt): Unit = ()
   @ignore def decreases(@ghost r1: BigInt, @ghost r2: BigInt, @ghost r3: BigInt): Unit = ()
   @ignore def decreases(@ghost r1: BigInt, @ghost r2: BigInt, @ghost r3: BigInt, @ghost r4: BigInt): Unit = ()

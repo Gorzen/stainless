@@ -4,6 +4,7 @@ package stainless.collection
 
 import stainless._
 import stainless.lang._
+import stainless.lang.StaticChecks._
 import stainless.annotation._
 import stainless.math._
 import stainless.proof._
@@ -13,10 +14,12 @@ import stainless.proof._
 sealed abstract class List[T] {
 
   @isabelle.function(term = "Int.int o List.length")
-  def size: BigInt = (this match {
+  final def size2: BigInt = (this match {
     case Nil() => BigInt(0)
     case Cons(h, t) => 1 + t.size
   }) ensuring (_ >= 0)
+
+  final def size: BigInt = foldLeft(BigInt(0)) { case (acc, _) => acc + 1 }
 
   def length = size
 
@@ -422,9 +425,12 @@ sealed abstract class List[T] {
   }} ensuring { _.size == this.size }
 
   @isabelle.function(term = "%bs a f. List.foldl f a bs")
-  def foldLeft[R](z: R)(f: (R,T) => R): R = this match {
-    case Nil() => z
-    case Cons(h,t) => t.foldLeft(f(z,h))(f)
+  @scala.annotation.tailrec
+  final def foldLeft[R](z: R)(f: (R,T) => R): R = {
+    this match {
+      case Nil() => z
+      case Cons(h,t) => t.foldLeft(f(z,h))(f)
+    }
   }
 
   @isabelle.function(term = "%as b f. List.foldr f as b")
@@ -536,17 +542,17 @@ sealed abstract class List[T] {
   def indexWhere(p: T => Boolean): BigInt = { this match {
     case Nil() => BigInt(-1)
     case Cons(h, _) if p(h) => BigInt(0)
-    case Cons(_, t) => 
+    case Cons(_, t) =>
       val rec = t.indexWhere(p)
       if (rec >= 0) rec + BigInt(1)
       else BigInt(-1)
-  }} ensuring { 
+  }} ensuring {
     _ >= BigInt(0) == (this exists p)
   }
 
 
   // Translation to other collections
-  def toSet: Set[T] = foldLeft(Set[T]()){ 
+  def toSet: Set[T] = foldLeft(Set[T]()){
     case (current, next) => current ++ Set(next)
   }
 }
@@ -575,7 +581,7 @@ object List {
     else Cons[T](x, fill[T](n-1)(x))
   } ensuring(res => (res.content == (if (n <= BigInt(0)) Set.empty[T] else Set(x))) &&
                     res.size == (if (n <= BigInt(0)) BigInt(0) else n))
-           
+
   /* Range from start (inclusive) to until (exclusive) */
   @library
   def range(start: BigInt, until: BigInt): List[BigInt] = {
@@ -583,7 +589,7 @@ object List {
     decreases(until - start)
     if(until <= start) Nil[BigInt]() else Cons(start, range(start + 1, until))
   } ensuring{(res: List[BigInt]) => res.size == until - start }
-  
+
   @library
   def mkString[A](l: List[A], mid: String, f: A => String) = {
     def rec(l: List[A]): String = l match {
@@ -916,7 +922,7 @@ object ListSpecs {
       case Cons(x, xs) => if (i == 0) true else appendInsert[T](xs, l2, i - 1, y)
     }
   )
-  
+
   /** A way to apply the forall axiom */
   def applyForAll[T](l: List[T], i: BigInt, p: T => Boolean): Boolean = {
     require(i >= 0 && i < l.length && l.forall(p))

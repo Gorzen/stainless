@@ -2,6 +2,7 @@ import stainless.lang._
 import stainless.proof._
 import stainless.annotation._
 import stainless.collection._
+import stainless.lang.StaticChecks._
 
 object FoldMapList {
   import MonoidLaws._
