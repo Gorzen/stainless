@@ -12,9 +12,9 @@ object MergeSort {
   }
 
   def sort[T](l: List[T])(implicit comparator: TotalOrder[T]): List[T] =  {
-    // decreases(l.size)
+    decreases(l.size)
     l match {
-      case x1 :: x2 :: xs =>
+      case Cons(x1, Cons(x2, xs)) =>
         val (left, right) = split(l)
         merge(sort(left), sort(right))
       case _ => l
@@ -46,10 +46,13 @@ object MergeSort {
     (left, right) match {
       case (_, Nil()) => left
       case (Nil(), _) => right
-      case (leftHead :: leftTail, rightHead :: rightTail) if(comparator.lteqv(leftHead, rightHead)) =>
+      case (Cons(leftHead, leftTail), Cons(rightHead, rightTail)) if(comparator.lteqv(leftHead, rightHead)) =>
         leftHead :: merge(leftTail, right)
-      case (leftHead :: leftTail, rightHead :: rightTail) =>
-        assert(lemma_merge(leftHead, leftTail, rightHead, rightTail))
+      case (Cons(leftHead, leftTail), Cons(rightHead, rightTail)) =>
+        assert(!comparator.lteqv(leftHead, rightHead))
+        assert(comparator.law_connex_total_order(leftHead, rightHead))
+        assert(comparator.lteqv(rightHead, leftHead))
+
         rightHead :: merge(left, rightTail)
     }
   } ensuring { res =>
@@ -59,13 +62,7 @@ object MergeSort {
   }
 
   def isSorted[T](l: List[T])(implicit comparator: TotalOrder[T]): Boolean = l match {
-    case x1 :: x2 :: xs => comparator.lteqv(x1, x2) && isSorted(x2 :: xs)
+    case Cons(x1, Cons(x2, xs)) => comparator.lteqv(x1, x2) && isSorted(x2 :: xs)
     case _ => true
   }
-
-  def lemma_merge[T](leftHead: T, leftTail: List[T], rightHead: T, rightTail: List[T])(implicit comparator: TotalOrder[T]): Boolean = {
-    require(isSorted(leftHead :: leftTail) && isSorted(rightHead :: rightTail) && !comparator.lteqv(leftHead, rightHead))
-    !comparator.lteqv(leftHead, rightHead) ==> comparator.lteqv(rightHead, leftHead) because comparator.law_connex_total_order(leftHead, rightHead)
-    (comparator.lteqv(rightHead, leftHead) && isSorted(merge(leftHead :: leftTail, rightTail))) ==> isSorted(rightHead :: merge(leftHead :: leftTail, rightTail))
-  }.holds
 }
