@@ -11,8 +11,26 @@ object FoldMapConcRope {
   import FoldMapList.{fold => foldL}
   import ProofFold._
 
+  val threshold = BigInt(32)
+
   def fold[A](xs: Conc[A])(implicit M: Monoid[A]): A = {
-  println("fold xs => " + xs.size)
+    xs match {
+      case Empty() => M.empty
+      case Single(x) => x
+      case CC(left, right) if xs.size <= threshold =>
+        M.append(fold(left), fold(right))
+      case Append(left, right) if xs.size <= threshold =>
+        M.append(fold(left), fold(right))
+      case CC(left, right) =>
+        val (l, r) = parallel(fold(left), fold(right))
+        M.append(l, r)
+      case Append(left, right) =>
+        val (l, r) = parallel(fold(left), fold(right))
+        M.append(l, r)
+    }
+  }
+
+  def fold2[A](xs: Conc[A])(implicit M: Monoid[A]): A = {
     xs match {
       case Empty() => M.empty
       case Single(x) =>
@@ -20,22 +38,33 @@ object FoldMapConcRope {
         assert(M.append(M.empty, x) == x)
         x
       case CC(left, right) =>
-        val (l, r) = (fold(left), fold(right))
+        val (l, r) = parallel(fold2(left), fold2(right))
         M.append(l, r)
       case Append(left, right) =>
-        val (l, r) = (fold(left), fold(right))
+        val (l, r) = parallel(fold2(left), fold2(right))
         M.append(l, r)
     }
   }
 
-  def concRopeFromList[A](xs: List[A]): Conc[A] = {
-    xs.foldLeft(Empty[A](): Conc[A]) { case (acc, x) =>
-      append(acc, x)
+  def fold3[A](xs: Conc[A])(implicit M: Monoid[A]): A = {
+    xs match {
+      case Empty() => M.empty
+      case Single(x) =>
+        assert(M.law_leftIdentity(x))
+        assert(M.append(M.empty, x) == x)
+        x
+      case CC(left, right) =>
+        M.append(fold3(left), fold3(right))
+      case Append(left, right) =>
+        M.append(fold3(left), fold3(right))
     }
-    // xs match {
-    //   case Nil() => Empty[A]()
-    //   case Cons(y, ys) => append(concRopeFromList(ys), y)
-    // }
+  }
+
+  def concRopeFromList[A](xs: List[A]): Conc[A] = {
+    xs match {
+      case Nil() => Empty[A]()
+      case Cons(y, ys) => append(concRopeFromList(ys), y)
+    }
   }
 
   def proof_concRopeFromList[A](xs: List[A]): Boolean = {
@@ -101,50 +130,50 @@ object FoldMapConcRope {
 
   def proof_fold[A](xs: Conc[A])(implicit M: Monoid[A]): Boolean = {
     decreases(xs.level)
-    (fold(xs) == foldL(xs.toList)) because {
+    (fold2(xs) == foldL(xs.toList)) because {
       xs match {
         case Empty() =>
-          assert(fold(Empty[A]()) == M.empty)
+          assert(fold2(Empty[A]()) == M.empty)
           assert(foldL(Empty[A]().toList) == foldL(Nil[A]()))
           assert(foldL(Nil[A]()) == M.empty)
-          check(fold(Empty[A]()) == foldL(Empty[A]().toList))
+          check(fold2(Empty[A]()) == foldL(Empty[A]().toList))
         case Single(x) =>
-          assert(fold(Single(x)) == x)
+          assert(fold2(Single(x)) == x)
           assert(foldL(Single(x).toList) == foldL(x :: Nil[A]()))
           assert(foldL(x :: Nil[A]()) == (x :: Nil[A]()).foldLeft(M.empty)(M.append))
           assert((x :: Nil[A]()).foldLeft(M.empty)(M.append) == Nil[A]().foldLeft(M.append(M.empty, x))(M.append))
           assert(M.law_leftIdentity(x))
           assert(Nil[A]().foldLeft(M.append(M.empty, x))(M.append) == Nil[A]().foldLeft(x)(M.append))
           assert(Nil[A]().foldLeft(x)(M.append) == x)
-          check(fold(Single(x)) == foldL(Single(x).toList))
+          check(fold2(Single(x)) == foldL(Single(x).toList))
         case CC(left, right) =>
-          val (l, r) = parallel(fold(left), fold(right))
-          assert(fold(CC(left, right)) == M.append(l, r))
+          val (l, r) = parallel(fold2(left), fold2(right))
+          assert(fold2(CC(left, right)) == M.append(l, r))
           assert(proof_helper(xs, left, right, l, r))
           assert(foldL(left.toList ++ right.toList) == foldL(CC(left, right).toList))
-          check(fold(CC(left, right)) == foldL(CC(left, right).toList))
+          check(fold2(CC(left, right)) == foldL(CC(left, right).toList))
         case Append(left, right) =>
-          val (l, r) = parallel(fold(left), fold(right))
-          assert(fold(Append(left, right)) == M.append(l, r))
+          val (l, r) = parallel(fold2(left), fold2(right))
+          assert(fold2(Append(left, right)) == M.append(l, r))
           assert(proof_helper(xs, left, right, l, r))
           assert(foldL(left.toList ++ right.toList) == foldL(Append(left, right).toList))
-          check(fold(Append(left, right)) == foldL(Append(left, right).toList))
+          check(fold2(Append(left, right)) == foldL(Append(left, right).toList))
       }
     }
   }.holds
 
   @inlineOnce
   def proof_helper[A](x: Conc[A], left: Conc[A], right: Conc[A], l: A, r: A)(implicit M: Monoid[A]): Boolean = {
-    require((l, r) == parallel(fold(left), fold(right)) && (x == Append(left, right) || x == CC(left, right)))
+    require((l, r) == parallel(fold2(left), fold2(right)) && (x == Append(left, right) || x == CC(left, right)))
 
     (M.append(l, r) == foldL(left.toList ++ right.toList)) because {
-      assert(l == fold(left))
-      assert(r == fold(right))
-      assert(M.append(l, r) == M.append(fold(left), fold(right)))
+      assert(l == fold2(left))
+      assert(r == fold2(right))
+      assert(M.append(l, r) == M.append(fold2(left), fold2(right)))
 
       assert(proof_fold(left))
       assert(proof_fold(right))
-      assert(M.append(fold(left), fold(right)) == M.append(foldL(left.toList), foldL(right.toList)))
+      assert(M.append(fold2(left), fold2(right)) == M.append(foldL(left.toList), foldL(right.toList)))
 
       assert(proof_foldConcat(left.toList, right.toList))
       assert(M.append(foldL(left.toList), foldL(right.toList)) == foldL(left.toList ++ right.toList))
@@ -183,6 +212,60 @@ object FoldMapConcRope {
           assert((z :: zs ++ ys).foldLeft(M.empty)(M.append) == foldL(z :: zs ++ ys))
           assert(foldL(z :: zs ++ ys) == foldL((z :: zs) ++ ys))
           check(M.append(foldL(z :: zs), foldL(ys)) == foldL((z :: zs) ++ ys))
+      }
+    }
+  }.holds
+
+  def check_foldFold2[A](xs: Conc[A])(implicit M: Monoid[A]): Boolean = {
+    (fold2(xs) == fold(xs)) because {
+      xs match {
+        case CC(left, right) =>
+          if(xs.size <= threshold){
+            val (l, r) = parallel(fold2(left), fold2(right))
+            assert(fold2(CC(left, right)) == M.append(l, r))
+            assert(l == fold2(left))
+            assert(r == fold2(right))
+            assert(M.append(l, r) == M.append(fold2(left), fold2(right)))
+            assert(check_foldFold2(left))
+            assert(check_foldFold2(right))
+            assert(M.append(fold2(left), fold2(right)) == M.append(fold(left), fold(right)))
+            assert(M.append(fold(left), fold(right)) == fold(xs))
+            check(fold2(xs) == fold(xs))
+          }else{
+            val (l, r) = parallel(fold2(left), fold2(right))
+            assert(fold2(CC(left, right)) == M.append(l, r))
+            assert(l == fold2(left) && r == fold2(right))
+            assert(check_foldFold2(left) && check_foldFold2(right))
+
+            val (l2, r2) = parallel(fold(left), fold(right))
+            assert(l2 == l && r2 == r)
+            assert(fold(CC(left, right)) == M.append(l2, r2))
+            check(fold2(xs) == fold(xs))
+          }
+        case Append(left, right) =>
+          if(xs.size <= threshold){
+            val (l, r) = parallel(fold2(left), fold2(right))
+            assert(fold2(Append(left, right)) == M.append(l, r))
+            assert(l == fold2(left))
+            assert(r == fold2(right))
+            assert(M.append(l, r) == M.append(fold2(left), fold2(right)))
+            assert(check_foldFold2(left))
+            assert(check_foldFold2(right))
+            assert(M.append(fold2(left), fold2(right)) == M.append(fold(left), fold(right)))
+            assert(M.append(fold(left), fold(right)) == fold(xs))
+            check(fold2(xs) == fold(xs))
+          }else{
+            val (l, r) = parallel(fold2(left), fold2(right))
+            assert(fold2(Append(left, right)) == M.append(l, r))
+            assert(l == fold2(left) && r == fold2(right))
+            assert(check_foldFold2(left) && check_foldFold2(right))
+
+            val (l2, r2) = parallel(fold(left), fold(right))
+            assert(l2 == l && r2 == r)
+            assert(fold(Append(left, right)) == M.append(l2, r2))
+            check(fold2(xs) == fold(xs))
+          }
+        case _ => true
       }
     }
   }.holds
