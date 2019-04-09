@@ -11,7 +11,6 @@ object Main {
   import FoldMapList.{fold => foldL}
   import MergeSort.{sort => mSort}
   import InsertionSort.{sort => iSort}
-  import MonoidMap._
   import WordCount._
   import TotalOrderWC._
 
