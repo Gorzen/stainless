@@ -46,17 +46,12 @@ object FoldMapConcRope {
     }
   }
 
-  def fold3[A](xs: Conc[A])(implicit M: Monoid[A]): A = {
+  def foldSequential[A](xs: Conc[A])(implicit M: Monoid[A]): A = {
     xs match {
       case Empty() => M.empty
-      case Single(x) =>
-        assert(M.law_leftIdentity(x))
-        assert(M.append(M.empty, x) == x)
-        x
-      case CC(left, right) =>
-        M.append(fold3(left), fold3(right))
-      case Append(left, right) =>
-        M.append(fold3(left), fold3(right))
+      case Single(x) => x
+      case CC(left, right) => M.append(foldSequential(left), foldSequential(right))
+      case Append(left, right) => M.append(foldSequential(left), foldSequential(right))
     }
   }
 
@@ -149,36 +144,34 @@ object FoldMapConcRope {
         case CC(left, right) =>
           val (l, r) = parallel(fold2(left), fold2(right))
           assert(fold2(CC(left, right)) == M.append(l, r))
-          assert(proof_helper(xs, left, right, l, r))
+
+          assert(l == fold2(left) && r == fold2(right))
+          assert(M.append(l, r) == M.append(fold2(left), fold2(right)))
+
+          assert(proof_fold(left) && proof_fold(right))
+          assert(M.append(fold2(left), fold2(right)) == M.append(foldL(left.toList), foldL(right.toList)))
+
+          assert(proof_foldConcat(left.toList, right.toList))
+          assert(M.append(foldL(left.toList), foldL(right.toList)) == foldL(left.toList ++ right.toList))
+
           assert(foldL(left.toList ++ right.toList) == foldL(CC(left, right).toList))
           check(fold2(CC(left, right)) == foldL(CC(left, right).toList))
         case Append(left, right) =>
           val (l, r) = parallel(fold2(left), fold2(right))
           assert(fold2(Append(left, right)) == M.append(l, r))
-          assert(proof_helper(xs, left, right, l, r))
+
+          assert(l == fold2(left) && r == fold2(right))
+          assert(M.append(l, r) == M.append(fold2(left), fold2(right)))
+
+          assert(proof_fold(left) && proof_fold(right))
+          assert(M.append(fold2(left), fold2(right)) == M.append(foldL(left.toList), foldL(right.toList)))
+
+          assert(proof_foldConcat(left.toList, right.toList))
+          assert(M.append(foldL(left.toList), foldL(right.toList)) == foldL(left.toList ++ right.toList))
+
           assert(foldL(left.toList ++ right.toList) == foldL(Append(left, right).toList))
           check(fold2(Append(left, right)) == foldL(Append(left, right).toList))
       }
-    }
-  }.holds
-
-  @inlineOnce
-  def proof_helper[A](x: Conc[A], left: Conc[A], right: Conc[A], l: A, r: A)(implicit M: Monoid[A]): Boolean = {
-    require((l, r) == parallel(fold2(left), fold2(right)) && (x == Append(left, right) || x == CC(left, right)))
-
-    (M.append(l, r) == foldL(left.toList ++ right.toList)) because {
-      assert(l == fold2(left))
-      assert(r == fold2(right))
-      assert(M.append(l, r) == M.append(fold2(left), fold2(right)))
-
-      assert(proof_fold(left))
-      assert(proof_fold(right))
-      assert(M.append(fold2(left), fold2(right)) == M.append(foldL(left.toList), foldL(right.toList)))
-
-      assert(proof_foldConcat(left.toList, right.toList))
-      assert(M.append(foldL(left.toList), foldL(right.toList)) == foldL(left.toList ++ right.toList))
-
-      check(M.append(l, r) == foldL(left.toList ++ right.toList))
     }
   }.holds
 
@@ -269,4 +262,24 @@ object FoldMapConcRope {
       }
     }
   }.holds
+
+  def check_foldSequentialFold2[A](xs: Conc[A])(implicit M: Monoid[A]): Boolean = {
+    (foldSequential(xs) == fold2(xs)) because {
+      xs match {
+        case CC(left, right) =>
+          val (l, r) = parallel(fold2(left), fold2(right))
+          assert(l == fold2(left) && r == fold2(right))
+          assert(check_foldSequentialFold2(left))
+          assert(check_foldSequentialFold2(right))
+          check(foldSequential(xs) == fold2(xs))
+        case Append(left, right) =>
+          val (l, r) = parallel(fold2(left), fold2(right))
+          assert(l == fold2(left) && r == fold2(right))
+          assert(check_foldSequentialFold2(left))
+          assert(check_foldSequentialFold2(right))
+          check(foldSequential(xs) == fold2(xs))
+        case _ => true
+      }
+    }
+  }
 }

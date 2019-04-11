@@ -34,6 +34,7 @@ object ProofFold {
           assert(M.law_leftIdentity(M.append(y1, y2)))
           assert(ys.foldLeft(M.append(y1, y2))(M.append) == ys.foldLeft(M.append(M.empty, M.append(y1, y2)))(M.append))
           assert(ys.foldLeft(M.append(M.empty, M.append(y1, y2)))(M.append) == (M.append(y1, y2) :: ys).foldLeft(M.empty)(M.append))
+          assert((M.append(y1, y2) :: ys).size < (y1 :: y2 :: ys).size)
           assert(foldLeftEqualsFoldRight(M.append(y1, y2) :: ys))
           assert((M.append(y1, y2) :: ys).foldLeft(M.empty)(M.append) == (M.append(y1, y2) :: ys).foldRight(M.empty)(M.append))
           assert((M.append(y1, y2) :: ys).foldRight(M.empty)(M.append) == M.append(M.append(y1, y2), ys.foldRight(M.empty)(M.append)))
