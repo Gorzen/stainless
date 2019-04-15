@@ -30,7 +30,7 @@ Sequential foldLeft on List[WC]  |  132812.152160333 seconds
 
 Sorting  |  Time
 --|--
-MergeSort on output (81'409 elements)  |  122.311692789 seconds
+MergeSort on output (81'409 elements)  |  0.516807123 seconds
 InsertionSort on output (81'409 elements)  |  82.337158522 seconds
 
 ## Medium file
@@ -63,7 +63,7 @@ Sequential foldLeft on List[WC]  |  1489.537584071 seconds
 
 Sorting  |  Time
 --|--
-MergeSort on output (15'535 elements)  |  4.766362684 seconds
+MergeSort on output (15'535 elements)  |  0.107238649 seconds
 InsertionSort on output (15'535 elements)  |  0.808636619 seconds
 
 ## Small file
@@ -96,5 +96,5 @@ Sequential foldLeft on List[WC]  |  9.377466506 seconds
 
 Sorting  |  Time
 --|--
-MergeSort on output (2'956 elements)  |  0.213397689 seconds
+MergeSort on output (2'956 elements)  |  0.034106565 seconds
 InsertionSort on output (2'956 elements)  |  0.087277808 seconds

@@ -1,6 +1,7 @@
 import stainless.collection._
 import stainless.lang._
 import stainless.proof._
+import stainless.annotation._
 import stainless.lang.StaticChecks._
 
 object MergeSort {
@@ -27,18 +28,42 @@ object MergeSort {
 
   def split[T](list: List[T]): (List[T], List[T]) = {
     require(list.size > 1)
-    list match {
-      case Cons(x, xs) if xs.size <= 2 =>
-        (List(x), xs)
-      case Cons(x1, Cons(x2, xs)) =>
-        val (s1, s2) = split(xs)
-        (Cons(x1, s1), Cons(x2, s2))
-    }
+    val (l, r) = evenSplit(list)
+    assert(l ++ r == list)
+    assert(bag(l ++ r) == bag(list))
+    assert(lemma_bagHomomorphism(l, r))
+    (l, r)
   } ensuring { res =>
-    res._1.size + res._2.size == list.size &&
+    res._1 ++ res._2 == list &&
+    bag(res._1) ++ bag(res._2) == bag(list) &&
+    list.size == res._1.size + res._2.size &&
     res._1.size > 0 &&
-    res._2.size > 0 &&
-    bag(res._1) ++ bag(res._2) == bag(list)
+    res._2.size > 0
+  }
+
+  @induct
+  def lemma_bagHomomorphism[T](l: List[T], r: List[T]) = {
+    bag(l ++ r) == bag(l) ++ bag(r)
+  }.holds
+
+  @inlineOnce
+  def evenSplit[T](list: List[T]) : (List[T], List[T]) = {
+    val index = list.size / 2
+    list match {
+      case Nil() => (Nil[T](), Nil[T]())
+      case Cons(h, rest) => {
+        if (index <= BigInt(0)) {
+          (Nil[T](), list)
+        } else {
+          val (left,right) = rest.splitAtIndex(index - 1)
+          (Cons[T](h,left), right)
+        }
+    }
+  }} ensuring { (res:(List[T],List[T])) =>
+    res._1 ++ res._2 == list &&
+    list.size == res._1.size + res._2.size &&
+    res._1.size == list.size / 2 &&
+    res._2.size == list.size - list.size / 2
   }
 
   def merge[T](left: List[T], right: List[T])(implicit comparator: TotalOrder[T]): List[T] = {
