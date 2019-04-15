@@ -9,12 +9,22 @@ import scala.concurrent.{Await, Future}
 import scala.language.reflectiveCalls
 
 object Parallel {
+  import Parallel2._
+
   @extern
-  def parallel[A, B](taskA: => A, taskB: => B): (A, B) = {
+  def parallel2[A, B](taskA: => A, taskB: => B): (A, B) = {
     val ta = Future { taskA }
     val tb = taskB
 
     (Await.result(ta, Duration.Inf), tb)
+  } ensuring { res =>
+    res._1 == taskA &&
+    res._2 == taskB
+  }
+
+  @extern
+  def parallel[A, B](taskA: => A, taskB: => B): (A, B) = {
+    parallel_ignore(taskA, taskB)
   } ensuring { res =>
     res._1 == taskA &&
     res._2 == taskB

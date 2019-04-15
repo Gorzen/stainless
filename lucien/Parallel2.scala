@@ -6,14 +6,13 @@ import stainless.annotation._
 import java.util.concurrent._
 import scala.util.DynamicVariable
 
-package object common {
+@ignore
+object Parallel2 {
 
-  val forkJoinPool = new ForkJoinPool
+  val forkJoinPool = new ForkJoinPool(16)
 
   abstract class TaskScheduler {
-    @extern
     def schedule[T](body: => T): ForkJoinTask[T]
-    @extern
     def parallel[A, B](taskA: => A, taskB: => B): (A, B) = {
       val right = task {
         taskB
@@ -23,8 +22,7 @@ package object common {
     }
   }
 
-  class DefaultTaskScheduler extends TaskScheduler {
-    @extern
+  case class DefaultTaskScheduler() extends TaskScheduler {
     def schedule[T](body: => T): ForkJoinTask[T] = {
       val t = new RecursiveTask[T] {
         def compute = body
@@ -39,26 +37,15 @@ package object common {
     }
   }
 
-  val scheduler = new DynamicVariable[TaskScheduler](new DefaultTaskScheduler)
+  val scheduler = new DynamicVariable[TaskScheduler](DefaultTaskScheduler())
 
-  @extern
   def task[T](body: => T): ForkJoinTask[T] = {
     scheduler.value.schedule(body)
   }
 
-  @extern
-  def parallel[A, B](taskA: => A, taskB: => B): (A, B) = {
+  def parallel_ignore[A, B](taskA: => A, taskB: => B): (A, B) = {
     scheduler.value.parallel(taskA, taskB)
   } ensuring { res =>
     taskA == res._1 && taskB == res._2
-  }
-
-  @extern
-  def parallel[A, B, C, D](taskA: => A, taskB: => B, taskC: => C, taskD: => D): (A, B, C, D) = {
-    val ta = task { taskA }
-    val tb = task { taskB }
-    val tc = task { taskC }
-    val td = taskD
-    (ta.join(), tb.join(), tc.join(), td)
   }
 }

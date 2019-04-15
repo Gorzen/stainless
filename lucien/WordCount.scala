@@ -14,7 +14,9 @@ object WordCount {
     def empty: WC = WC(Bag.empty[String])
 
     def append(x: WC, y: WC): WC = {
-      //println(x.words.theBag.size)
+      /*val s = x.words.theBag.size
+      if(s % 500 == 0)
+        println(x.words.theBag.size)*/
       WC(x.words ++ y.words)
     }
   }
