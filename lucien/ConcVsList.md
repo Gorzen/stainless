@@ -182,52 +182,52 @@ List | ConcRope
 `--` | Missing
 `:+` | Similar function `insert`
 `::` | Similar function `insert`
-`appendAssoc` |
-`appendContent` |
-`appendIndex` |
-`appendInsert` |
-`appendTakeDrop` |
-`appendUpdate` |
+`appendAssoc` | Similar function `insert`
+`appendContent` | Similar function `insert`
+`appendIndex` | Similar function `insert`
+`appendInsert` | Similar function `insert`
+`appendTakeDrop` | Similar function `insert`
+`appendUpdate` | Similar function `insert`
 `apply` | Similar function `lookup`
-`applyForAll` |
-`associative` |
-`chunks` |
+`applyForAll` | Missing
+`associative` | 
+`chunks` |  
 `consIndex` |
-`contains` |
-`content` |
+`contains` | Missing
+`content` | Missing
 `count` |
-`drop` |
-`dropWhile` |
-`evenSplit` |
+`drop` | Missing
+`dropWhile` | Missing
+`evenSplit` | Similar function `split`
 `exists` |
 `existsAssoc` |
 `fill` |
-`filter` |
-`filterNot` |
+`filter` | Missing
+`filterNot` | Missing
 `find` |
-`flatMap` |
-`flatten` |
-`flattenPreservesContent` |
-`foldLeft` |
-`foldRight` |
-`folds` |
-`forall` |
-`forallAssoc` |
-`groupBy` |
-`head` |
-`headOption` |
-`headReverseLast` |
-`indexOf` |
+`flatMap` | Missing
+`flatten` | Missing
+`flattenPreservesContent` | Missing
+`foldLeft` | Missing
+`foldRight` | Missing
+`folds` | Missing
+`forall` | Missing
+`forallAssoc` | Missing
+`groupBy` | Missing
+`head` | Missing
+`headOption` | Missing
+`headReverseLast` | Missing
+`indexOf` | Similar function `lookup`
 `indexWhere` |
 `init` |
 `insertAt` |
 `insertAtImpl` |
-`isEmpty` |
-`isSorted` |
-`last` |
-`lastOption` |
+`isEmpty` | Present
+`isSorted` | Missing
+`last` | Missing
+`lastOption` | Missing
 `leftUnitAppend` |
-`length` |
+`length` | Similar function `size`
 `map` | Missing
 `mkString` | Missing
 `nonEmpty` | Missing
@@ -244,11 +244,11 @@ List | ConcRope
 `reverseReverse` |
 `rightUnitAppend` |
 `rotate` |
-`scanLeft` |
-`scanRight` |
-`scanVsFoldLeft` |
-`scanVsFoldRight` |
-`size` |
+`scanLeft` | Missing
+`scanRight` | Missing
+`scanVsFoldLeft` | Missing
+`scanVsFoldRight` | Missing
+`size` | Present
 `slice` |
 `snocAfterAppend` |
 `snocFoldRight` |
@@ -256,19 +256,19 @@ List | ConcRope
 `snocIsAppend` |
 `snocLast` |
 `snocReverse` |
-`sorted` |
-`sortedIns` |
-`split` |
-`splitAt` |
-`splitAtIndex` |
-`tail` |
-`tailOption` |
-`take` |
-`takeWhile` |
-`toMap` |
-`toSet` |
-`unapply` |
-`unique` |
-`updated` |
-`withFilter` |
-`zip` |
+`sorted` | Missing
+`sortedIns` | Missing
+`split` | Present
+`splitAt` | Similar function `split`
+`splitAtIndex` | Similar function `split`
+`tail` | Missing
+`tailOption` | Missing
+`take` | Missing
+`takeWhile` | Missing
+`toMap` | Missing
+`toSet` | Missing
+`unapply` | Missing
+`unique` | Missing
+`updated` | Similar function `update`
+`withFilter` | Missing
+`zip` | Missing
