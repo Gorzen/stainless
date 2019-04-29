@@ -5,17 +5,8 @@
 - `--`
 - `:+`
 - `::`
-- `appendAssoc`
-- `appendContent`
-- `appendIndex`
-- `appendInsert`
-- `appendTakeDrop`
-- `appendUpdate`
 - `apply`
-- `applyForAll`
-- `associative`
 - `chunks`
-- `consIndex`
 - `contains`
 - `content`
 - `count`
@@ -23,33 +14,26 @@
 - `dropWhile`
 - `evenSplit`
 - `exists`
-- `existsAssoc`
 - `fill`
 - `filter`
 - `filterNot`
 - `find`
 - `flatMap`
 - `flatten`
-- `flattenPreservesContent`
 - `foldLeft`
 - `foldRight`
-- `folds`
 - `forall`
-- `forallAssoc`
 - `groupBy`
 - `head`
 - `headOption`
-- `headReverseLast`
 - `indexOf`
 - `indexWhere`
 - `init`
 - `insertAt`
-- `insertAtImpl`
 - `isEmpty`
 - `isSorted`
 - `last`
 - `lastOption`
-- `leftUnitAppend`
 - `length`
 - `map`
 - `mkString`
@@ -57,28 +41,14 @@
 - `padTo`
 - `partition`
 - `range`
-- `rec`
 - `replace`
 - `replaceAt`
-- `replaceAtImpl`
 - `reverse`
-- `reverseAppend`
-- `reverseIndex`
-- `reverseReverse`
-- `rightUnitAppend`
 - `rotate`
 - `scanLeft`
 - `scanRight`
-- `scanVsFoldLeft`
-- `scanVsFoldRight`
 - `size`
 - `slice`
-- `snocAfterAppend`
-- `snocFoldRight`
-- `snocIndex`
-- `snocIsAppend`
-- `snocLast`
-- `snocReverse`
 - `sorted`
 - `sortedIns`
 - `split`
@@ -99,9 +69,6 @@
 # All ConcRope methods
 - `abs`
 - `append`
-- `appendAssocInst`
-- `appendAssocInst2`
-- `appendInsertIndex`
 - `appendInv`
 - `appendPriv`
 - `balanced`
@@ -110,11 +77,7 @@
 - `concatNonEmpty`
 - `concatNormalized`
 - `insert`
-- `insertAppendAxiomInst`
 - `insertAtIndex`
-- `instAppendIndexAxiom`
-- `instAppendUpdateAxiom`
-- `instSplitAxiom`
 - `isEmpty`
 - `isLeaf`
 - `isNormalized`
@@ -180,82 +143,52 @@ List | ConcRope
 `++` | Similar function `concat`
 `-` | :x:
 `--` | :x:
-`:+` | Similar function `insert`
-`::` | Similar function `insert`
-`appendAssoc` | Similar function `insert`
-`appendContent` | Similar function `insert`
-`appendIndex` | Similar function `insert`
-`appendInsert` | Similar function `insert`
-`appendTakeDrop` | Similar function `insert`
-`appendUpdate` | Similar function `insert`
+`:+` | Similar function `append`
+`::` | Similar function `insertAtIndex`
 `apply` | Similar function `lookup`
-`applyForAll` | :x:
-`associative` | 
-`chunks` |  
-`consIndex` |
+`chunks` | :x:
 `contains` | :x:
 `content` | :x:
-`count` |
+`count` | :x:
 `drop` | :x:
 `dropWhile` | :x:
 `evenSplit` | Similar function `split`
-`exists` |
-`existsAssoc` |
-`fill` |
+`exists` | :x:
+`fill` | :x:
 `filter` | :x:
 `filterNot` | :x:
-`find` |
+`find` | :x:
 `flatMap` | :x:
 `flatten` | :x:
-`flattenPreservesContent` | :x:
 `foldLeft` | :x:
 `foldRight` | :x:
-`folds` | :x:
 `forall` | :x:
-`forallAssoc` | :x:
 `groupBy` | :x:
 `head` | :x:
 `headOption` | :x:
-`headReverseLast` | :x:
-`indexOf` | Similar function `lookup`
-`indexWhere` |
-`init` |
-`insertAt` |
-`insertAtImpl` |
+`indexOf` | :x:
+`indexWhere` | :x:
+`init` | :x:
+`insertAt` | Similar function `insertAtIndex`
 `isEmpty` | :heavy_check_mark:
 `isSorted` | :x:
 `last` | :x:
 `lastOption` | :x:
-`leftUnitAppend` |
 `length` | Similar function `size`
 `map` | :x:
 `mkString` | :x:
 `nonEmpty` | :x:
-`padTo` |
-`partition` |
-`range` |
-`rec` |
-`replace` |
-`replaceAt` |
-`replaceAtImpl` |
-`reverse` |
-`reverseAppend` |
-`reverseIndex` |
-`reverseReverse` |
-`rightUnitAppend` |
-`rotate` |
+`padTo` | :x:
+`partition` | :x:
+`range` | :x:
+`replace` | :x:
+`replaceAt` | Similar function `update`
+`reverse` | :x:
+`rotate` | :x:
 `scanLeft` | :x:
 `scanRight` | :x:
-`scanVsFoldLeft` | :x:
-`scanVsFoldRight` | :x:
 `size` | :heavy_check_mark:
-`slice` |
-`snocAfterAppend` |
-`snocFoldRight` |
-`snocIndex` |
-`snocIsAppend` |
-`snocLast` |
-`snocReverse` |
+`slice` | :x:
 `sorted` | :x:
 `sortedIns` | :x:
 `split` | :heavy_check_mark:
