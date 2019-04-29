@@ -101,40 +101,49 @@
 - `--`
 
 # Methods in List that could be good to have in ConcRope
+## Maps
 - `map`
 - `flatMap`
 - `flatten`
+## Folds
 - `fold`
 - `foldLeft`
 - `foldRight`
+- `scanLeft`
+- `scanRight`
+## Equality and predicates
 - `contains`
-- `content`
-- `drop`
-- `exists`
 - `filter`
+- `replace`
 - `find`
 - `forall`
-- `groupBy`
-- `indexOf`
-- `indexWhere`
-- `isEmpty`
-- `isSorted`
-- `head`
-- `last`
-- `mkString`
-- `replace`
-- `reverse`
-- `scan`
-- `sort`
-- `split`
-- `tail`
-- `take`
-- `toMap`
-- `toSet`
-- `unique`
-- `zip`
+- `exists`
 - `-`
 - `--`
+- `indexOf`
+- `indexWhere`
+- `unique`
+## List-like methods
+- `drop`
+- `take`
+- `head`
+- `last`
+- `tail`
+## Working with data
+- `groupyBy`
+- `zip`
+## Transformation
+- `toSet`
+- `toMap`
+- `content`
+## Reordering elements
+- `reverse`
+- `isSorted`
+- `sort`
+## Misc
+- `nonEmpty`
+- `mkString`
+- `split`
 
 # Comparison
 List | ConcRope
@@ -164,16 +173,16 @@ List | ConcRope
 `foldRight` | :x:
 `forall` | :x:
 `groupBy` | :x:
-`head` | :x:
-`headOption` | :x:
+`head` | Similar function `lookup`
+`headOption` | Similar function `lookup`
 `indexOf` | :x:
 `indexWhere` | :x:
 `init` | :x:
 `insertAt` | Similar function `insertAtIndex`
 `isEmpty` | :heavy_check_mark:
 `isSorted` | :x:
-`last` | :x:
-`lastOption` | :x:
+`last` | Similar function `lookup`
+`lastOption` | Similar function `lookup`
 `length` | Similar function `size`
 `map` | :x:
 `mkString` | :x:
@@ -191,9 +200,9 @@ List | ConcRope
 `slice` | :x:
 `sorted` | :x:
 `sortedIns` | :x:
-`split` | :heavy_check_mark:
-`splitAt` | Similar function `split`
-`splitAtIndex` | Similar function `split`
+`split` | :x: 
+`splitAt` | :x:
+`splitAtIndex` | :heavy_check_mark: `split`
 `tail` | :x:
 `tailOption` | :x:
 `take` | :x:
@@ -202,6 +211,6 @@ List | ConcRope
 `toSet` | :x:
 `unapply` | :x:
 `unique` | :x:
-`updated` | Similar function `update`
+`updated` | :heavy_check_mark: `update`
 `withFilter` | :x:
 `zip` | :x:
