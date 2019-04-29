@@ -176,10 +176,10 @@
 # Comparison
 List | ConcRope
 --|--
-`&` | Missing
+`&` | :x:
 `++` | Similar function `concat`
-`-` | Missing
-`--` | Missing
+`-` | :x:
+`--` | :x:
 `:+` | Similar function `insert`
 `::` | Similar function `insert`
 `appendAssoc` | Similar function `insert`
@@ -189,48 +189,48 @@ List | ConcRope
 `appendTakeDrop` | Similar function `insert`
 `appendUpdate` | Similar function `insert`
 `apply` | Similar function `lookup`
-`applyForAll` | Missing
+`applyForAll` | :x:
 `associative` | 
 `chunks` |  
 `consIndex` |
-`contains` | Missing
-`content` | Missing
+`contains` | :x:
+`content` | :x:
 `count` |
-`drop` | Missing
-`dropWhile` | Missing
+`drop` | :x:
+`dropWhile` | :x:
 `evenSplit` | Similar function `split`
 `exists` |
 `existsAssoc` |
 `fill` |
-`filter` | Missing
-`filterNot` | Missing
+`filter` | :x:
+`filterNot` | :x:
 `find` |
-`flatMap` | Missing
-`flatten` | Missing
-`flattenPreservesContent` | Missing
-`foldLeft` | Missing
-`foldRight` | Missing
-`folds` | Missing
-`forall` | Missing
-`forallAssoc` | Missing
-`groupBy` | Missing
-`head` | Missing
-`headOption` | Missing
-`headReverseLast` | Missing
+`flatMap` | :x:
+`flatten` | :x:
+`flattenPreservesContent` | :x:
+`foldLeft` | :x:
+`foldRight` | :x:
+`folds` | :x:
+`forall` | :x:
+`forallAssoc` | :x:
+`groupBy` | :x:
+`head` | :x:
+`headOption` | :x:
+`headReverseLast` | :x:
 `indexOf` | Similar function `lookup`
 `indexWhere` |
 `init` |
 `insertAt` |
 `insertAtImpl` |
-`isEmpty` | Present
-`isSorted` | Missing
-`last` | Missing
-`lastOption` | Missing
+`isEmpty` | :heavy_check_mark:
+`isSorted` | :x:
+`last` | :x:
+`lastOption` | :x:
 `leftUnitAppend` |
 `length` | Similar function `size`
-`map` | Missing
-`mkString` | Missing
-`nonEmpty` | Missing
+`map` | :x:
+`mkString` | :x:
+`nonEmpty` | :x:
 `padTo` |
 `partition` |
 `range` |
@@ -244,11 +244,11 @@ List | ConcRope
 `reverseReverse` |
 `rightUnitAppend` |
 `rotate` |
-`scanLeft` | Missing
-`scanRight` | Missing
-`scanVsFoldLeft` | Missing
-`scanVsFoldRight` | Missing
-`size` | Present
+`scanLeft` | :x:
+`scanRight` | :x:
+`scanVsFoldLeft` | :x:
+`scanVsFoldRight` | :x:
+`size` | :heavy_check_mark:
 `slice` |
 `snocAfterAppend` |
 `snocFoldRight` |
@@ -256,19 +256,19 @@ List | ConcRope
 `snocIsAppend` |
 `snocLast` |
 `snocReverse` |
-`sorted` | Missing
-`sortedIns` | Missing
-`split` | Present
+`sorted` | :x:
+`sortedIns` | :x:
+`split` | :heavy_check_mark:
 `splitAt` | Similar function `split`
 `splitAtIndex` | Similar function `split`
-`tail` | Missing
-`tailOption` | Missing
-`take` | Missing
-`takeWhile` | Missing
-`toMap` | Missing
-`toSet` | Missing
-`unapply` | Missing
-`unique` | Missing
+`tail` | :x:
+`tailOption` | :x:
+`take` | :x:
+`takeWhile` | :x:
+`toMap` | :x:
+`toSet` | :x:
+`unapply` | :x:
+`unique` | :x:
 `updated` | Similar function `update`
-`withFilter` | Missing
-`zip` | Missing
+`withFilter` | :x:
+`zip` | :x:
