@@ -107,6 +107,7 @@
 - `flatten`
 ## Folds
 - `fold`
+- `foldMap`
 - `foldLeft`
 - `foldRight`
 - `scanLeft`
