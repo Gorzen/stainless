@@ -150,12 +150,12 @@
 List | ConcRope | New ConcRope
 --|--|--
 `&` | :x: | :x:
-`++` | Similar function `concat` | Similar function `concat`
+`++` | Similar function `concat` | :heavy_check_mark:
 `-` | :x: | :x:
 `--` | :x: | :x:
 `:+` | Similar function `append` | Similar function `append`
 `::` | Similar function `insertAtIndex` | Similar function `insertAtIndex`
-`apply` | Similar function `lookup` | Similar function `lookup`
+`apply` | Similar function `lookup` | :heavy_check_mark:
 `chunks` | :x: | :x:
 `contains` | :x: | :x:
 `content` | :x: | :x:
@@ -170,12 +170,13 @@ List | ConcRope | New ConcRope
 `find` | :x: | :x:
 `flatMap` | :x: | :x:
 `flatten` | :x: | :x:
-`foldLeft` | :x: | :x:
-`foldRight` | :x: | :x:
+`foldLeft` | :x: | :heavy_check_mark:
+:x: | :x: | `foldMap`
+`foldRight` | :x: | :heavy_check_mark:
 `forall` | :x: | :x:
 `groupBy` | :x: | :x:
-`head` | Similar function `lookup` | Similar function `lookup`
-`headOption` | Similar function `lookup` | Similar function `lookup`
+`head` | Similar function `lookup` | :heavy_check_mark:
+`headOption` | Similar function `lookup` | :heavy_check_mark:
 `indexOf` | :x: | :x:
 `indexWhere` | :x: | :x:
 `init` | :x: | :x:
@@ -185,7 +186,7 @@ List | ConcRope | New ConcRope
 `last` | Similar function `lookup` | Similar function `lookup`
 `lastOption` | Similar function `lookup` | Similar function `lookup`
 `length` | Similar function `size` | Similar function `size`
-`map` | :x: | :x:
+`map` | :x: | :heavy_check_mark:
 `mkString` | :x: | :x:
 `nonEmpty` | :x: | :x:
 `padTo` | :x: | :x:

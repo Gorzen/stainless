@@ -1,4 +1,3 @@
-package conc
 // By Ravi Kandhadai Madhavan @ LARA, EPFL. (c) EPFL
 
 import stainless.collection._
@@ -8,6 +7,7 @@ import ListSpecs._
 import stainless.annotation._
 
 object ConcRope {
+  import MonoidLaws._
 
   def max(x: BigInt, y: BigInt): BigInt = if (x >= y) x else y
   def abs(x: BigInt): BigInt = if (x < 0) -x else x
@@ -108,12 +108,104 @@ object ConcRope {
           l.toList ++ r.toList
       }
     } ensuring (res => res.size == this.size)
+
+    def apply(i: BigInt): T = {
+      require(this.valid && !this.isEmpty && i >= 0 && i < this.size)
+      lookup(this, i)
+    } ensuring (res =>  instAppendIndexAxiom(this, i) &&  // an auxiliary axiom instantiation that required for the proof
+      res == this.toList(i))
+
+    def head: T = {
+      require(this.valid && !this.isEmpty && this.size > 0)
+      this(0)
+    } ensuring ( res => res == this(0) &&
+      res == this.toList(0))
+
+    def headOption: Option[T] = {
+      require(this.valid)
+      if(this.size == 0)
+        None[T]()
+      else
+        Some(this(0))
+    } ensuring ( res => if(this.size == 0)
+                          res == None[T]()
+                        else
+                          res == Some(this(0)) && res == Some(this.toList(0)))
+
+    def ++(that: Conc[T]): Conc[T] = {
+      require(this.valid && that.valid)
+      concat(this, that)
+    } ensuring (res => res.valid && // tree invariants
+      res.level <= max(normalize(this).level, normalize(that).level) + 1 && // height invariants
+      res.level >= max(normalize(this).level, normalize(that).level) &&
+      (res.toList == this.toList ++ that.toList) && // correctness
+      res.isNormalized //auxiliary properties
+      )
+
+    def map[R](f: T => R): Conc[R] = { this match {
+      case Empty() => Empty[R]()
+      case Single(x) => Single(f(x))
+      case CC(left, right) => CC(left.map(f), right.map(f))
+      case Append(left, right) => Append(left.map(f), right.map(f))
+    }} ensuring { _.size == this.size }
+
+    def foldMap[R](f: T => R)(implicit M: Monoid[R]): R = { this match {
+      case Empty() => M.empty
+      case Single(x) => f(x)
+      case CC(left, right) => M.append(left.foldMap(f), right.foldMap(f))
+      case Append(left, right) => M.append(left.foldMap(f), right.foldMap(f))
+    }}
+
+    def foldLeft[R](z: R)(f: (R, T) => R): R = { this match {
+      case Empty() => z
+      case Single(x) => f(z, x)
+      case CC(left, right) => {
+        val leftFold = left.foldLeft(z)(f)
+        right.foldLeft(leftFold)(f)
+      }
+      case Append(left, right) => {
+        val leftFold = left.foldLeft(z)(f)
+        right.foldLeft(leftFold)(f)
+      }
+    }}
+
+    def foldRight[R](z: R)(f: (T, R) => R): R = { this match {
+      case Empty() => z
+      case Single(x) => f(x, z)
+      case CC(left, right) => {
+        val rightFold = right.foldRight(z)(f)
+        left.foldRight(rightFold)(f)
+      }
+      case Append(left, right) => {
+        val rightFold = right.foldRight(z)(f)
+        left.foldRight(rightFold)(f)
+      }
+    }}
+
+    /**def flatMap[R](f: T => Conc[R]): Conc[R] = {
+      flatten(map(f))
+    }*/
   }
 
   case class Empty[T]() extends Conc[T]
   case class Single[T](x: T) extends Conc[T]
   case class CC[T](left: Conc[T], right: Conc[T]) extends Conc[T]
   case class Append[T](left: Conc[T], right: Conc[T]) extends Conc[T]
+
+  /**def flatten[T](xs: Conc[Conc[T]]): Conc[T] = xs match {
+    case Empty() => Empty[T]()
+    case Single(x) => normalize(x)
+    case CC(left, right) => normalize(flatten(left) ++ flatten(right))
+    case Append(left, right) => normalize(flatten(left) ++ flatten(right))
+  }
+
+  def sanitize[T](xs: Conc[T]): Conc[T] = { xs match {
+    case Empty() => Empty[T]()
+    case Single(x) => normalize(Single(x))
+    case CC(left, right) => normalize(CC(sanitize(left), sanitize(right)))
+    case Append(left, right) => normalize(Append(sanitize(left), sanitize(right)))
+  }} ensuring ( res => res.isNormalized &&
+    res.valid)*/
 
   def lookup[T](xs: Conc[T], i: BigInt): T = {
     require(xs.valid && !xs.isEmpty && i >= 0 && i < xs.size)
