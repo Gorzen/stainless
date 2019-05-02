@@ -182,9 +182,22 @@ object ConcRope {
       }
     }}
 
-    /**def flatMap[R](f: T => Conc[R]): Conc[R] = {
+    // Could there be a better way?
+    // Rather than requiring that the function gives us only valid ConcRope, we could maybe 'sanitize' the produced ConcRopes
+    // Because maybe this is too restrictive
+    def flatMap[R](f: T => Conc[R]): Conc[R] = {
+      require(map(f).forall(c => c.valid))
       flatten(map(f))
-    }*/
+    } ensuring (res => res.valid && res.isNormalized)
+
+    def forall(p: T => Boolean): Boolean = { this match {
+      case Empty() => true
+      case Single(x) => p(x)
+      case CC(left, right) => left.forall(p) && right.forall(p)
+      case Append(left, right) => left.forall(p) && right.forall(p)
+    }}
+
+    def exists(p: T => Boolean): Boolean = !forall(!p(_))
   }
 
   case class Empty[T]() extends Conc[T]
@@ -192,20 +205,15 @@ object ConcRope {
   case class CC[T](left: Conc[T], right: Conc[T]) extends Conc[T]
   case class Append[T](left: Conc[T], right: Conc[T]) extends Conc[T]
 
-  /**def flatten[T](xs: Conc[Conc[T]]): Conc[T] = xs match {
-    case Empty() => Empty[T]()
-    case Single(x) => normalize(x)
-    case CC(left, right) => normalize(flatten(left) ++ flatten(right))
-    case Append(left, right) => normalize(flatten(left) ++ flatten(right))
-  }
-
-  def sanitize[T](xs: Conc[T]): Conc[T] = { xs match {
-    case Empty() => Empty[T]()
-    case Single(x) => normalize(Single(x))
-    case CC(left, right) => normalize(CC(sanitize(left), sanitize(right)))
-    case Append(left, right) => normalize(Append(sanitize(left), sanitize(right)))
-  }} ensuring ( res => res.isNormalized &&
-    res.valid)*/
+  def flatten[T](xs: Conc[Conc[T]]): Conc[T] = {
+    require(xs.forall(c => c.valid))
+    xs match {
+      case Empty() => Empty[T]()
+      case Single(x) => normalize(x)
+      case CC(left, right) => normalize(flatten(left) ++ flatten(right))
+      case Append(left, right) => normalize(flatten(left) ++ flatten(right))
+    }
+  } ensuring (res => res.valid && res.isNormalized)
 
   def lookup[T](xs: Conc[T], i: BigInt): T = {
     require(xs.valid && !xs.isEmpty && i >= 0 && i < xs.size)

@@ -106,7 +106,6 @@
 - `flatMap`
 - `flatten`
 ## Folds
-- `fold`
 - `foldMap`
 - `foldLeft`
 - `foldRight`
@@ -147,7 +146,7 @@
 - `split`
 
 # Comparison
-List | ConcRope | New ConcRope
+List | ConcRope | Extended ConcRope
 --|--|--
 `&` | :x: | :x:
 `++` | Similar function `concat` | :heavy_check_mark:
@@ -163,17 +162,17 @@ List | ConcRope | New ConcRope
 `drop` | :x: | :x:
 `dropWhile` | :x: | :x:
 `evenSplit` | Similar function `split` | Similar function `split`
-`exists` | :x: | :x:
+`exists` | :x: | :heavy_check_mark:
 `fill` | :x: | :x:
 `filter` | :x: | :x:
 `filterNot` | :x: | :x:
 `find` | :x: | :x:
-`flatMap` | :x: | :x:
-`flatten` | :x: | :x:
+`flatMap` | :x: | :heavy_check_mark:
+`flatten` | :x: | :heavy_check_mark: as in List, not in class
 `foldLeft` | :x: | :heavy_check_mark:
 :x: | :x: | `foldMap`
 `foldRight` | :x: | :heavy_check_mark:
-`forall` | :x: | :x:
+`forall` | :x: | :heavy_check_mark:
 `groupBy` | :x: | :x:
 `head` | Similar function `lookup` | :heavy_check_mark:
 `headOption` | Similar function `lookup` | :heavy_check_mark:
