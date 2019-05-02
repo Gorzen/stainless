@@ -147,71 +147,71 @@
 - `split`
 
 # Comparison
-List | ConcRope
---|--
-`&` | :x:
-`++` | Similar function `concat`
-`-` | :x:
-`--` | :x:
-`:+` | Similar function `append`
-`::` | Similar function `insertAtIndex`
-`apply` | Similar function `lookup`
-`chunks` | :x:
-`contains` | :x:
-`content` | :x:
-`count` | :x:
-`drop` | :x:
-`dropWhile` | :x:
-`evenSplit` | Similar function `split`
-`exists` | :x:
-`fill` | :x:
-`filter` | :x:
-`filterNot` | :x:
-`find` | :x:
-`flatMap` | :x:
-`flatten` | :x:
-`foldLeft` | :x:
-`foldRight` | :x:
-`forall` | :x:
-`groupBy` | :x:
-`head` | Similar function `lookup`
-`headOption` | Similar function `lookup`
-`indexOf` | :x:
-`indexWhere` | :x:
-`init` | :x:
-`insertAt` | Similar function `insertAtIndex`
-`isEmpty` | :heavy_check_mark:
+List | ConcRope | New ConcRope
+--|--|--
+`&` | :x: | :x:
+`++` | Similar function `concat` | Similar function `concat`
+`-` | :x: | :x:
+`--` | :x: | :x:
+`:+` | Similar function `append` | Similar function `append`
+`::` | Similar function `insertAtIndex` | Similar function `insertAtIndex`
+`apply` | Similar function `lookup` | Similar function `lookup`
+`chunks` | :x: | :x:
+`contains` | :x: | :x:
+`content` | :x: | :x:
+`count` | :x: | :x:
+`drop` | :x: | :x:
+`dropWhile` | :x: | :x:
+`evenSplit` | Similar function `split` | Similar function `split`
+`exists` | :x: | :x:
+`fill` | :x: | :x:
+`filter` | :x: | :x:
+`filterNot` | :x: | :x:
+`find` | :x: | :x:
+`flatMap` | :x: | :x:
+`flatten` | :x: | :x:
+`foldLeft` | :x: | :x:
+`foldRight` | :x: | :x:
+`forall` | :x: | :x:
+`groupBy` | :x: | :x:
+`head` | Similar function `lookup` | Similar function `lookup`
+`headOption` | Similar function `lookup` | Similar function `lookup`
+`indexOf` | :x: | :x:
+`indexWhere` | :x: | :x:
+`init` | :x: | :x:
+`insertAt` | Similar function `insertAtIndex` | Similar function `insertAtIndex`
+`isEmpty` | :heavy_check_mark: | :heavy_check_mark:
 `isSorted` | :x:
-`last` | Similar function `lookup`
-`lastOption` | Similar function `lookup`
-`length` | Similar function `size`
-`map` | :x:
-`mkString` | :x:
-`nonEmpty` | :x:
-`padTo` | :x:
-`partition` | :x:
-`range` | :x:
-`replace` | :x:
-`replaceAt` | Similar function `update`
-`reverse` | :x:
-`rotate` | :x:
-`scanLeft` | :x:
-`scanRight` | :x:
-`size` | :heavy_check_mark:
-`slice` | :x:
-`sorted` | :x:
-`sortedIns` | :x:
-`split` | :x: 
-`splitAt` | :x:
-`splitAtIndex` | :heavy_check_mark: `split`
-`tail` | :x:
-`tailOption` | :x:
-`take` | :x:
-`takeWhile` | :x:
-`toMap` | :x:
-`toSet` | :x:
-`unapply` | :x:
-`unique` | :x:
-`updated` | :heavy_check_mark: `update`
-`withFilter` | :x:
-`zip` | :x:
+`last` | Similar function `lookup` | Similar function `lookup`
+`lastOption` | Similar function `lookup` | Similar function `lookup`
+`length` | Similar function `size` | Similar function `size`
+`map` | :x: | :x:
+`mkString` | :x: | :x:
+`nonEmpty` | :x: | :x:
+`padTo` | :x: | :x:
+`partition` | :x: | :x:
+`range` | :x: | :x:
+`replace` | :x: | :x:
+`replaceAt` | Similar function `update` | Similar function `update`
+`reverse` | :x: | :x:
+`rotate` | :x: | :x:
+`scanLeft` | :x: | :x:
+`scanRight` | :x: | :x:
+`size` | :heavy_check_mark: | :heavy_check_mark:
+`slice` | :x: | :x:
+`sorted` | :x: | :x:
+`sortedIns` | :x: | :x:
+`split` | :x:  | :x: 
+`splitAt` | :x: | :x:
+`splitAtIndex` | :heavy_check_mark: `split` | :heavy_check_mark: `split`
+`tail` | :x: | :x:
+`tailOption` | :x: | :x:
+`take` | :x: | :x:
+`takeWhile` | :x: | :x:
+`toMap` | :x: | :x:
+`toSet` | :x: | :x:
+`unapply` | :x: | :x:
+`unique` | :x: | :x:
+`updated` | :heavy_check_mark: `update` | :heavy_check_mark: `update`
+`withFilter` | :x: | :x:
+`zip` | :x: | :x:
