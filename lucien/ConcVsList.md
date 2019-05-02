@@ -181,7 +181,7 @@ List | ConcRope | Extended ConcRope
 `init` | :x: | :x:
 `insertAt` | Similar function `insertAtIndex` | Similar function `insertAtIndex`
 `isEmpty` | :heavy_check_mark: | :heavy_check_mark:
-`isSorted` | :x:
+`isSorted` | :x: | :x:
 `last` | Similar function `lookup` | Similar function `lookup`
 `lastOption` | Similar function `lookup` | Similar function `lookup`
 `length` | Similar function `size` | Similar function `size`
@@ -215,3 +215,17 @@ List | ConcRope | Extended ConcRope
 `updated` | :heavy_check_mark: `update` | :heavy_check_mark: `update`
 `withFilter` | :x: | :x:
 `zip` | :x: | :x:
+
+# Methods added
+- `++`
+- `apply`
+- `exists`
+- `flatMap`
+- `flatten`
+- `foldLeft`
+- `foldMap`
+- `foldRight`
+- `forall`
+- `head`
+- `headOption`
+- `map`
