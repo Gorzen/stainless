@@ -12,7 +12,23 @@ object ConcRope {
   def max(x: BigInt, y: BigInt): BigInt = if (x >= y) x else y
   def abs(x: BigInt): BigInt = if (x < 0) -x else x
 
+  object Conc {
+
+    def flatten[T](xs: Conc[Conc[T]]): Conc[T] = {
+      require(xs.forall(c => c.valid))
+      xs match {
+        case Empty() => Empty[T]()
+        case Single(x) => normalize(x)
+        case CC(left, right) => flatten(left) ++ flatten(right)
+        case Append(left, right) => flatten(left) ++ flatten(right)
+      }
+    } ensuring (res => res.valid && res.isNormalized)
+
+    def empty[T]: Conc[T] = Empty[T]()
+  }
+
   sealed abstract class Conc[T] {
+    import Conc._
 
     def isEmpty: Boolean = {
       this == Empty[T]()
@@ -187,7 +203,13 @@ object ConcRope {
     // Because maybe this is too restrictive
     def flatMap[R](f: T => Conc[R]): Conc[R] = {
       require(map(f).forall(c => c.valid))
-      flatten(map(f))
+
+      this match {
+        case Empty() => Empty[R]()
+        case Single(x) => normalize(f(x))
+        case CC(left, right) => left.flatMap(f) ++ right.flatMap(f)
+        case Append(left, right) => left.flatMap(f) ++ right.flatMap(f)
+      }
     } ensuring (res => res.valid && res.isNormalized)
 
     def forall(p: T => Boolean): Boolean = { this match {
@@ -204,16 +226,6 @@ object ConcRope {
   case class Single[T](x: T) extends Conc[T]
   case class CC[T](left: Conc[T], right: Conc[T]) extends Conc[T]
   case class Append[T](left: Conc[T], right: Conc[T]) extends Conc[T]
-
-  def flatten[T](xs: Conc[Conc[T]]): Conc[T] = {
-    require(xs.forall(c => c.valid))
-    xs match {
-      case Empty() => Empty[T]()
-      case Single(x) => normalize(x)
-      case CC(left, right) => normalize(flatten(left) ++ flatten(right))
-      case Append(left, right) => normalize(flatten(left) ++ flatten(right))
-    }
-  } ensuring (res => res.valid && res.isNormalized)
 
   def lookup[T](xs: Conc[T], i: BigInt): T = {
     require(xs.valid && !xs.isEmpty && i >= 0 && i < xs.size)
