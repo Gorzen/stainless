@@ -135,6 +135,17 @@ object ConcRope {
       }
     } ensuring (res => res.size == this.size)
 
+    def toSet: Set[T] = {
+      content
+    } ensuring ( res => res == this.toList.content)
+
+    def content: Set[T] = { this match {
+      case Empty() => Set[T]()
+      case Single(x) => Set(x)
+      case CC(left, right) => left.content ++ right.content
+      case Append(left, right) => left.content ++ right.content
+    }} ensuring ( res => res == this.toList.content)
+
     def apply(i: BigInt): T = {
       require(this.valid && !this.isEmpty && i >= 0 && i < this.size)
       lookup(this, i)

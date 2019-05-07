@@ -157,7 +157,7 @@ List | ConcRope | Extended ConcRope
 `apply` | Similar function `lookup` | :heavy_check_mark:
 `chunks` | :x: | :x:
 `contains` | :x: | :x:
-`content` | :x: | :x:
+`content` | :x: | :heavy_check_mark:
 `count` | :x: | :x:
 `drop` | :x: | :x:
 `dropWhile` | :x: | :x:
@@ -209,7 +209,7 @@ List | ConcRope | Extended ConcRope
 `take` | :x: | :x:
 `takeWhile` | :x: | :x:
 `toMap` | :x: | :x:
-`toSet` | :x: | :x:
+`toSet` | :x: | :heavy_check_mark:
 `unapply` | :x: | :x:
 `unique` | :x: | :x:
 `updated` | :heavy_check_mark: `update` | :heavy_check_mark: `update`
@@ -219,6 +219,7 @@ List | ConcRope | Extended ConcRope
 # Methods added
 - `++`
 - `apply`
+- `content`
 - `exists`
 - `flatMap`
 - `flatten`
@@ -231,3 +232,4 @@ List | ConcRope | Extended ConcRope
 - `headOption`
 - `map`
 - `reverse`
+- `toSet`
