@@ -193,7 +193,7 @@ List | ConcRope | Extended ConcRope
 `range` | :x: | :x:
 `replace` | :x: | :x:
 `replaceAt` | Similar function `update` | Similar function `update`
-`reverse` | :x: | :x:
+`reverse` | :x: | :heavy_check_mark:
 `rotate` | :x: | :x:
 `scanLeft` | :x: | :x:
 `scanRight` | :x: | :x:
@@ -226,6 +226,8 @@ List | ConcRope | Extended ConcRope
 - `foldMap`
 - `foldRight`
 - `forall`
+- `fromList`
 - `head`
 - `headOption`
 - `map`
+- `reverse`

@@ -2,12 +2,14 @@
 
 import stainless.collection._
 import stainless.lang._
+import stainless.proof._
 import stainless.lang.StaticChecks._
 import ListSpecs._
 import stainless.annotation._
 
 object ConcRope {
   import MonoidLaws._
+  import ConcRopeFromList._
 
   def max(x: BigInt, y: BigInt): BigInt = if (x >= y) x else y
   def abs(x: BigInt): BigInt = if (x < 0) -x else x
@@ -25,6 +27,14 @@ object ConcRope {
     } ensuring (res => res.valid && res.isNormalized)
 
     def empty[T]: Conc[T] = Empty[T]()
+
+    def fromList[T](xs: List[T]): Conc[T] = {
+      privateFromList(xs).reverse
+    } ensuring (res => (res.toList == xs) because ListSpecs.reverseReverse(xs))
+
+    private def privateFromList[T](xs: List[T]): Conc[T] = {
+      ConcRopeFromList.concRopeFromList(xs)
+    } ensuring (res => (res.toList == xs.reverse) because ConcRopeFromList.lemma_concRopeFromList(xs))
   }
 
   sealed abstract class Conc[T] {
@@ -220,6 +230,36 @@ object ConcRope {
     }}
 
     def exists(p: T => Boolean): Boolean = !forall(!p(_))
+
+    def reverse: Conc[T] = { this match {
+      case Empty() => Empty[T]()
+      case Single(x) => Single(x)
+      case CC(left, right) => CC(right.reverse, left.reverse)
+      case Append(left, right) => Append(right.reverse, left.reverse)
+    }} ensuring (res => (res.toList == this.toList.reverse) because {
+      this match {
+        case Empty() => true
+        case Single(x) => true
+        case CC(left, right) => {
+          assert(res.toList == CC(right.reverse, left.reverse).toList)
+          assert(CC(right.reverse, left.reverse).toList == right.reverse.toList ++ left.reverse.toList)
+          assert(right.reverse.toList ++ left.reverse.toList == right.toList.reverse ++ left.toList.reverse)
+          assert(ConcRopeFromList.concat_reverse(left.toList, right.toList))
+          assert(right.toList.reverse ++ left.toList.reverse == (left.toList ++ right.toList).reverse)
+          assert((left.toList ++ right.toList).reverse == (CC(left, right).toList).reverse)
+          check(res.toList == this.toList.reverse)
+        }
+        case Append(left, right) => {
+          assert(res.toList == Append(right.reverse, left.reverse).toList)
+          assert(Append(right.reverse, left.reverse).toList == right.reverse.toList ++ left.reverse.toList)
+          assert(right.reverse.toList ++ left.reverse.toList == right.toList.reverse ++ left.toList.reverse)
+          assert(ConcRopeFromList.concat_reverse(left.toList, right.toList))
+          assert(right.toList.reverse ++ left.toList.reverse == (left.toList ++ right.toList).reverse)
+          assert((left.toList ++ right.toList).reverse == (Append(left, right).toList).reverse)
+          check(res.toList == this.toList.reverse)
+        }
+      }
+    })
   }
 
   case class Empty[T]() extends Conc[T]
