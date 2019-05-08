@@ -156,7 +156,7 @@ List | ConcRope | Extended ConcRope
 `::` | Similar function `insertAtIndex` | Similar function `insertAtIndex`
 `apply` | Similar function `lookup` | :heavy_check_mark:
 `chunks` | :x: | :x:
-`contains` | :x: | :x:
+`contains` | :x: | :heavy_check_mark:
 `content` | :x: | :heavy_check_mark:
 `count` | :x: | :x:
 `drop` | :x: | :x:
@@ -219,6 +219,7 @@ List | ConcRope | Extended ConcRope
 # Methods added
 - `++`
 - `apply`
+- `contains`
 - `content`
 - `exists`
 - `flatMap`

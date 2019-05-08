@@ -271,6 +271,13 @@ object ConcRope {
         }
       }
     })
+
+    def contains(v: T): Boolean = { this match {
+      case Empty() => false
+      case Single(x) => v == x
+      case CC(left, right) => left.contains(v) || right.contains(v)
+      case Append(left, right) => left.contains(v) || right.contains(v)
+    }} ensuring { res => res == (content contains v) && res == (toList contains v) }
   }
 
   case class Empty[T]() extends Conc[T]
