@@ -28,12 +28,16 @@ object ConcRope {
 
     def empty[T]: Conc[T] = Empty[T]()
 
-    def fromList[T](xs: List[T]): Conc[T] = {
-      privateFromList(xs).reverse
-    } ensuring (res => res.content == xs.content &&
-      res.size == xs.size &&
+    def fromList[T](list: List[T]): Conc[T] = { list match {
+      case Nil() => Conc.empty[T]
+      case x :: xs => x :: fromList(xs)
+    }} ensuring { res =>
+      res.toList == list &&
+      res.isNormalized &&
       res.valid &&
-      (res.toList == xs) because ListSpecs.reverseReverse(xs))
+      res.size == list.size &&
+      res.content == list.content
+    }
 
     private def privateFromList[T](xs: List[T]): Conc[T] = {
       ConcRopeFromList.concRopeFromList(xs)
@@ -152,6 +156,23 @@ object ConcRope {
       lookup(this, i)
     } ensuring (res =>  instAppendIndexAxiom(this, i) &&  // an auxiliary axiom instantiation that required for the proof
       res == this.toList(i))
+
+    def :+(x: T) = {
+      require(valid)
+      append(this, x)
+    } ensuring (res => res.valid && //conctree invariants
+      res.toList == this.toList ++ Cons(x, Nil[T]()) && //correctness
+      res.level <= this.level + 1
+    )
+
+    def ::(x: T) = {
+      require(valid && isNormalized)
+      insert(this, 0, x)
+    } ensuring (res => insertAppendAxiomInst(this, 0, x) && // instantiation of an axiom
+      res.valid && res.isNormalized && // tree invariants
+      res.level - this.level <= 1 && res.level >= this.level && // height of the output tree is at most 1 greater than that of the input tree
+      res.toList == x :: this.toList // correctness
+      )
 
     def head: T = {
       require(this.valid && !this.isEmpty && this.size > 0)

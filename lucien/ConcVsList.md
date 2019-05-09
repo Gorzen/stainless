@@ -152,8 +152,8 @@ List | ConcRope | Extended ConcRope
 `++` | Similar function `concat` | :heavy_check_mark:
 `-` | :x: | :x:
 `--` | :x: | :x:
-`:+` | Similar function `append` | Similar function `append`
-`::` | Similar function `insertAtIndex` | Similar function `insertAtIndex`
+`:+` | Similar function `append` | :heavy_check_mark:
+`::` | Similar function `insertAtIndex` | :heavy_check_mark:
 `apply` | Similar function `lookup` | :heavy_check_mark:
 `chunks` | :x: | :x:
 `contains` | :x: | :heavy_check_mark:
@@ -218,6 +218,8 @@ List | ConcRope | Extended ConcRope
 
 # Methods added
 - `++`
+- `::`
+- `:+`
 - `apply`
 - `contains`
 - `content`
