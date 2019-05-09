@@ -12,7 +12,7 @@ object ConcRopeFromList {
       case Nil() => Empty[A]()
       case Cons(y, ys) => append(concRopeFromList(ys), y)
     }
-  }
+  } ensuring (res => res.valid)
 
   def proof_concRopeFromList[A](xs: List[A]): Boolean = {
     (concRopeFromList(xs).toList == xs.reverse) because lemma_concRopeFromList(xs)
