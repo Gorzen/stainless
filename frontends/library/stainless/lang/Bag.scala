@@ -10,17 +10,17 @@ object Bag {
 
   @ignore
   def apply[A](elems: (A, BigInt)*): Bag[A] = {
-    Bag(elems.toMap)
+    SmallBag(elems.toMap)
   }
 }
 
 @ignore
-abstract class Bag[A] {
+sealed abstract class Bag[A] {
   import scala._
 
-  private val threshold = 1000
+  private val threshold = 100000
 
-  private val size = {
+  private val size: BigInt = {
     this match {
       case SmallBag(theMap) => theMap.size
       case BigBag(left, right) => left.size + right.size
@@ -35,44 +35,58 @@ abstract class Bag[A] {
 
   def +(a: A): Bag[A] = this match {
     case SmallBag(theMap) => theMap.get(a) match {
-      case None => Bag(theMap + (a -> BigInt(1)))
-      case Some(i) => Bag(theMap.updated(a, i + 1))
+      case None => SmallBag(theMap + (a -> BigInt(1)))
+      case Some(i) => SmallBag(theMap.updated(a, i + 1))
     }
     case BigBag(left, right) if left.size < right.size => BigBag(left + a, right)
-    case _ => BigBag(left, right + a)
+    case BigBag(left, right) => BigBag(left, right + a)
   }
 
   def +(a: A, count: BigInt): Bag[A] = this match {
     case SmallBag(theMap) => theMap.get(a) match {
-      case None => Bag(theMap + (a -> count))
-      case Some(i) => Bag(theMap.updated(a, i + count))
+      case None => SmallBag(theMap + (a -> count))
+      case Some(i) => SmallBag(theMap.updated(a, i + count))
     }
     case BigBag(left, right) if left.size < right.size => BigBag(left.+(a, count), right)
-    case _ => BigBag(left, right.+(a, count))
+    case BigBag(left, right) => BigBag(left, right.+(a, count))
   }
 
   def ++(that: Bag[A]): Bag[A] = {
-    this match {
-      case SmallBag(theMap) =>
-        if (that.size > theMap.size)
-          that ++ this
-        else {
-          Bag(that.theMap.toSeq.foldLeft(theMap)((z, x) => {
-            z.get(x._1) match {
-              case None => z + ((x._1, x._2))
-              case Some(i) => z.updated(x._1, x._2 + i)
+    if (that.size > this.size)
+      that ++ this
+    else
+      this match {
+        case SmallBag(theMap) =>
+          if (size >= threshold)
+            BigBag(this, that)
+          else {
+            that match {
+              case SmallBag(thatMap) => SmallBag(thatMap.toSeq.foldLeft(theMap)((z, x) => {
+                  z.get(x._1) match {
+                    case None => z + ((x._1, x._2))
+                    case Some(i) => z.updated(x._1, x._2 + i)
+                  }
+                }))
+              case BigBag(left, right) => (this ++ left) ++ right
             }
-          }))
+          }
+        case BigBag(left, right) => {
+          if(left.size < threshold)
+            BigBag(left ++ that, right)
+          else if (right.size < threshold)
+            BigBag(left, right ++ that)
+          else
+            BigBag(this, that)
         }
-      case BigBag(left, right) => {
-        
       }
-    }
   }
 
-  def isEmpty: Boolean = theMap.isEmpty
+  def isEmpty: Boolean = this match {
+    case SmallBag(theMap) => theMap.isEmpty
+    case BigBag(left, right) => left.isEmpty && right.isEmpty
+  }
 
-  def --(that: Bag[A]): Bag[A] = {
+  /**def --(that: Bag[A]): Bag[A] = {
     if (that.theMap.size < theMap.size)
       Bag(that.theMap.toSeq.foldLeft(theMap)((z, x) => {
         z.get(x._1) match {
@@ -107,8 +121,13 @@ abstract class Bag[A] {
   def &(that: Bag[A]): Bag[A] = new Bag[A](theMap.flatMap { case (k,v) =>
     val res = v min that.get(k)
     if (res <= 0) Nil else List(k -> res)
-  })
+  })*/
 
-  case class SmallBag[A](theMap: ScalaMap[A, BigInt])
-  case class BigBag[A](left: Bag[A], right: Bag[A])
+  val toList: scala.collection.immutable.List[(A, BigInt)] = this match {
+    case SmallBag(theMap) => theMap.toList
+    case BigBag(left, right) => left.toList ++ right.toList
+  }
 }
+
+case class SmallBag[A](theMap: ScalaMap[A, BigInt]) extends Bag[A]
+case class BigBag[A](left: Bag[A], right: Bag[A]) extends Bag[A]

@@ -92,7 +92,6 @@ object Main2 {
 
     println("Finish reading file, start fold")
 
-
     var wordsV: List[WC] = Nil[WC]()
     for (e <- scalaListOfWC){
       wordsV = Cons(e, wordsV)
