@@ -166,7 +166,7 @@ List | ConcRope | Extended ConcRope
 `fill` | :x: | :x:
 `filter` | :x: | :x:
 `filterNot` | :x: | :x:
-`find` | :x: | :x:
+`find` | :x: | :heavy_check_mark:
 `flatMap` | :x: | :heavy_check_mark:
 `flatten` | :x: | :heavy_check_mark: as in List, not in class
 `foldLeft` | :x: | :heavy_check_mark:
@@ -224,6 +224,7 @@ List | ConcRope | Extended ConcRope
 - `contains`
 - `content`
 - `exists`
+- `find`
 - `flatMap`
 - `flatten`
 - `foldLeft`

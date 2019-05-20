@@ -38,10 +38,6 @@ object ConcRope {
       res.size == list.size &&
       res.content == list.content
     }
-
-    private def privateFromList[T](xs: List[T]): Conc[T] = {
-      ConcRopeFromList.concRopeFromList(xs)
-    } ensuring (res => res.valid && (res.toList == xs.reverse) because ConcRopeFromList.lemma_concRopeFromList(xs))
   }
 
   sealed abstract class Conc[T] {
@@ -269,30 +265,32 @@ object ConcRope {
       case Single(x) => Single(x)
       case CC(left, right) => CC(right.reverse, left.reverse)
       case Append(left, right) => Append(right.reverse, left.reverse)
-    }} ensuring (res => (res.toList == this.toList.reverse) because {
-      this match {
-        case Empty() => true
-        case Single(x) => true
-        case CC(left, right) => {
-          assert(res.toList == CC(right.reverse, left.reverse).toList)
-          assert(CC(right.reverse, left.reverse).toList == right.reverse.toList ++ left.reverse.toList)
-          assert(right.reverse.toList ++ left.reverse.toList == right.toList.reverse ++ left.toList.reverse)
-          assert(ConcRopeFromList.concat_reverse(left.toList, right.toList))
-          assert(right.toList.reverse ++ left.toList.reverse == (left.toList ++ right.toList).reverse)
-          assert((left.toList ++ right.toList).reverse == (CC(left, right).toList).reverse)
-          check(res.toList == this.toList.reverse)
+    }} ensuring (res => res.size == this.size &&
+      res.content == this.content &&
+      (res.toList == this.toList.reverse) because {
+        this match {
+          case Empty() => true
+          case Single(x) => true
+          case CC(left, right) => {
+            assert(res.toList == CC(right.reverse, left.reverse).toList)
+            assert(CC(right.reverse, left.reverse).toList == right.reverse.toList ++ left.reverse.toList)
+            assert(right.reverse.toList ++ left.reverse.toList == right.toList.reverse ++ left.toList.reverse)
+            assert(ConcRopeFromList.concat_reverse(left.toList, right.toList))
+            assert(right.toList.reverse ++ left.toList.reverse == (left.toList ++ right.toList).reverse)
+            assert((left.toList ++ right.toList).reverse == (CC(left, right).toList).reverse)
+            check(res.toList == this.toList.reverse)
+          }
+          case Append(left, right) => {
+            assert(res.toList == Append(right.reverse, left.reverse).toList)
+            assert(Append(right.reverse, left.reverse).toList == right.reverse.toList ++ left.reverse.toList)
+            assert(right.reverse.toList ++ left.reverse.toList == right.toList.reverse ++ left.toList.reverse)
+            assert(ConcRopeFromList.concat_reverse(left.toList, right.toList))
+            assert(right.toList.reverse ++ left.toList.reverse == (left.toList ++ right.toList).reverse)
+            assert((left.toList ++ right.toList).reverse == (Append(left, right).toList).reverse)
+            check(res.toList == this.toList.reverse)
+          }
         }
-        case Append(left, right) => {
-          assert(res.toList == Append(right.reverse, left.reverse).toList)
-          assert(Append(right.reverse, left.reverse).toList == right.reverse.toList ++ left.reverse.toList)
-          assert(right.reverse.toList ++ left.reverse.toList == right.toList.reverse ++ left.toList.reverse)
-          assert(ConcRopeFromList.concat_reverse(left.toList, right.toList))
-          assert(right.toList.reverse ++ left.toList.reverse == (left.toList ++ right.toList).reverse)
-          assert((left.toList ++ right.toList).reverse == (Append(left, right).toList).reverse)
-          check(res.toList == this.toList.reverse)
-        }
-      }
-    })
+      })
 
     def contains(v: T): Boolean = { this match {
       case Empty() => false
@@ -300,6 +298,29 @@ object ConcRope {
       case CC(left, right) => left.contains(v) || right.contains(v)
       case Append(left, right) => left.contains(v) || right.contains(v)
     }} ensuring { res => res == (content contains v) && res == (toList contains v) }
+
+    def find(p: T => Boolean): Option[T] = { this match {
+      case Empty() => None[T]()
+      case Single(x) if p(x) => Some(x)
+      case Single(x) => None[T]()
+      case CC(left, right) => {
+        val l = left.find(p)
+        if(l.isEmpty)
+          right.find(p)
+        else
+          l
+      }
+      case Append(left, right) => {
+        val l = left.find(p)
+        if(l.isEmpty)
+          right.find(p)
+        else
+          l
+      }
+    }} ensuring { res => res match {
+      case Some(t) => (content contains t) && p(t)
+      case None() => true
+    }}
 
     // def filter2(p: T => Boolean): Conc[T] = {
     //   require(this.valid)
@@ -325,7 +346,7 @@ object ConcRope {
     //   res.forall(p)
     // }
 
-    @induct
+    /**@induct
     def filter(p: T => Boolean): Conc[T] = {
       require(this.valid)
       val res = Conc.fromList(toList.filter(p))
@@ -353,11 +374,11 @@ object ConcRope {
       res.valid &&
       res.isNormalized &&
       res.forall(p)
-    }
+    }*/
   }
 
   //@induct
-  def lemma_filter[T](left: Conc[T], right: Conc[T], p: T => Boolean): Boolean = {
+  /**def lemma_filter[T](left: Conc[T], right: Conc[T], p: T => Boolean): Boolean = {
     require(left.valid && right.valid)
 
     ((left.filter(p) ++ right.filter(p)).forall(p)) because {
@@ -431,13 +452,13 @@ object ConcRope {
           assert(left.filter(p).forall(p) && right.filter(p).forall(p))
           assert(left.filter(p).forall(p) && right.filter(p).forall(p) ==> (left.filter(p) ++ right.filter(p)).forall(p))
           assert(CC(left, right).filter(p).forall(p))
-          check(xs.filter(p).forall(p))
+          check(xs.filter(p).forall(p))*/
           /**assert((left.filter(p) ++ right.filter(p)).forall(p) == (left.filter(p) ++ right.filter(p)).toList.forall(p))
           assert((left.filter(p) ++ right.filter(p)).toList.forall(p) == (left.filter(p).toList ++ right.filter(p).toList).forall(p))
           assert((left.filter(p).toList ++ right.filter(p).toList).forall(p) ==> left.filter(p).toList.forall(p) && right.filter(p).toList.forall(p))
           assert(left.filter(p).toList.forall(p) && right.filter(p).toList.forall(p) ==  left.filter(p).forall(p) && right.filter(p).forall(p))
           assert((left.filter(p) ++ right.filter(p)).forall(p))*/
-        case Append(left, right) =>
+        /**case Append(left, right) =>
           assert(Append(left, right).filter(p) == left.filter(p) ++ right.filter(p))
           assert(proof_filter(left, p) && proof_filter(right, p))
           assert(left.filter(p).forall(p) && right.filter(p).forall(p))
@@ -446,7 +467,7 @@ object ConcRope {
           check(xs.filter(p).forall(p))
       }
     }
-  }.holds
+  }.holds*/
 
   case class Empty[T]() extends Conc[T]
   case class Single[T](x: T) extends Conc[T]
