@@ -6,7 +6,7 @@ import stainless.collection._
 import scala.io.Source
 import java.io._
 
-object Main {
+object Main2 {
   import FoldMapConcRope.{fold => foldC}
   import FoldMapConcRope.concRopeFromList
   import FoldMapConcRope.foldSequential
@@ -36,62 +36,81 @@ object Main {
       System.exit(1)
     }
 
+    var timeAnalysis = ""
+
     // Scala list to stainless list?
-    val wordsStd = Source.fromFile(args(0))
-      .getLines
-      .flatMap(line => line.split(' '))
-      .map(_.trim)
-      .filterNot(_.isEmpty)
-      .toList
+    val wordsStd = Source.fromFile(args(0)).getLines
 
-    val uniqueWordsStd = wordsStd.toSet
+    val t = System.nanoTime
 
-    val words = wordsStd.map(s => WC(Bag((s, BigInt(1)))))
+    val scalaListOfWC = wordsStd.zipWithIndex.map(x => {
+      val line = x._1
 
-    var wordsV: List[WC] = Nil[WC]()
-    for (e <- words){
-      wordsV = Cons(e, wordsV)
-    }
+      if (x._2 % 10000 == 0){
+        println("Doing line " + x._2)
+      }
 
-    var uniqueWordsV: List[String] = Nil[String]()
-    for(e <- uniqueWordsStd){
-      uniqueWordsV = Cons(e, uniqueWordsV)
-    }
+      val words = line.split(' ').map(s => WC(Bag((s, BigInt(1)))))
 
-    // This list is reversed, but it doesn't matter if we count words
-    var uniqueWords: List[String] = uniqueWordsV
+      var wordsV: List[WC] = Nil[WC]()
+      for (e <- words){
+        wordsV = Cons(e, wordsV)
+      }
 
-    println("Starting word count for file '" + args(0) + "' in " + (if(parallel) "parallel on ConcRope" else if(sequential) "sequential on ConcRope" else "sequential on List") + " with " + (if(noSort) "no" else if(merge) "merge" else "insertion") + " sort.")
+      val list: List[WC] = wordsV
 
-    val list: List[WC] = wordsV
-    var timeAnalysis: String = ""
+      val wc: WC = if(parallel) {
+        val c = concRopeFromList(list)
+
+        val v = foldC(c)(WordCountMonoid())
+        v
+      } else if(sequential) {
+        val c = concRopeFromList(list)
+
+        val v = foldSequential(c)(WordCountMonoid())
+        v
+      } else {
+        val v = foldL(list)(WordCountMonoid())
+        v
+      }
+      wc
+    })
 
     println("Finish reading file, start fold")
 
-    val wc: WC = if(parallel) {
-      val (c, s1) = time(Conc.fromList(list), "ConcRope from list:")
 
-      val (v, s2) = time(foldC(c)(WordCountMonoid()), "Parallel fold on ConcRope:")
-      timeAnalysis += s1 + s2
+    var wordsV: List[WC] = Nil[WC]()
+    for (e <- scalaListOfWC){
+      wordsV = Cons(e, wordsV)
+    }
+
+    val list: List[WC] = wordsV
+
+    val wc: WC = if(parallel) {
+      val c = concRopeFromList(list)
+
+      val v = foldC(c)(WordCountMonoid())
       v
     } else if(sequential) {
-      val (c, s1) = time(Conc.fromList(list), "ConcRope from list:")
+      val c = concRopeFromList(list)
 
-      val (v, s2) = time(foldSequential(c)(WordCountMonoid()), "Sequential fold on ConcRope:")
-      timeAnalysis += s1 + s2
+      val v = foldSequential(c)(WordCountMonoid())
       v
     } else {
-      val (v, s) = time(foldL(list)(WordCountMonoid()), "Sequential fold on List:")
-      timeAnalysis += s
+      val v = foldL(list)(WordCountMonoid())
       v
     }
 
-    println("Finish fold, start retrieving list")
+    timeAnalysis += "Finish fold in " + (System.nanoTime - t) / 1e9 + " seconds, start retrieving list\n"
 
-    val wordCount: List[(String, BigInt)] = uniqueWords
-      .foldLeft(List[(String, BigInt)]()) { case (acc, w) =>
-        Cons((w, wc.words(w)), acc)
-      }
+    val scalaWords = wc.words.theMap.toList
+
+    var vv: List[(String, BigInt)] = Nil[(String, BigInt)]()
+    for(e <- scalaWords){
+      vv = Cons(e, vv)
+    }
+
+    val wordCount: List[(String, BigInt)] = vv
 
     //.map(s => (s, wc.words.apply(s)))
 
