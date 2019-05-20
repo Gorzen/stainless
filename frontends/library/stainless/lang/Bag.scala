@@ -15,32 +15,58 @@ object Bag {
 }
 
 @ignore
-case class Bag[A](theMap: ScalaMap[A, BigInt]) {
+abstract class Bag[A] {
   import scala._
 
-  def apply(a: A): BigInt = get(a)
-  def get(a: A): BigInt = theMap.getOrElse(a, BigInt(0))
+  private val threshold = 1000
 
-  def +(a: A): Bag[A] = theMap.get(a) match {
-    case None => Bag(theMap + (a -> BigInt(1)))
-    case Some(i) => Bag(theMap.updated(a, i + 1))
+  private val size = {
+    this match {
+      case SmallBag(theMap) => theMap.size
+      case BigBag(left, right) => left.size + right.size
+    }
   }
 
-  def +(a: A, count: BigInt): Bag[A] = theMap.get(a) match {
-    case None => Bag(theMap + (a -> count))
-    case Some(i) => Bag(theMap.updated(a, i + count))
+  def apply(a: A): BigInt = get(a)
+  def get(a: A): BigInt = this match {
+    case SmallBag(theMap) => theMap.getOrElse(a, BigInt(0))
+    case BigBag(left, right) => left.get(a) + right.get(a)
+  }
+
+  def +(a: A): Bag[A] = this match {
+    case SmallBag(theMap) => theMap.get(a) match {
+      case None => Bag(theMap + (a -> BigInt(1)))
+      case Some(i) => Bag(theMap.updated(a, i + 1))
+    }
+    case BigBag(left, right) if left.size < right.size => BigBag(left + a, right)
+    case _ => BigBag(left, right + a)
+  }
+
+  def +(a: A, count: BigInt): Bag[A] = this match {
+    case SmallBag(theMap) => theMap.get(a) match {
+      case None => Bag(theMap + (a -> count))
+      case Some(i) => Bag(theMap.updated(a, i + count))
+    }
+    case BigBag(left, right) if left.size < right.size => BigBag(left.+(a, count), right)
+    case _ => BigBag(left, right.+(a, count))
   }
 
   def ++(that: Bag[A]): Bag[A] = {
-    if (that.theMap.size > theMap.size)
-      that ++ this
-    else {
-      Bag(that.theMap.toSeq.foldLeft(theMap)((z, x) => {
-        z.get(x._1) match {
-          case None => z + ((x._1, x._2))
-          case Some(i) => z.updated(x._1, x._2 + i)
+    this match {
+      case SmallBag(theMap) =>
+        if (that.size > theMap.size)
+          that ++ this
+        else {
+          Bag(that.theMap.toSeq.foldLeft(theMap)((z, x) => {
+            z.get(x._1) match {
+              case None => z + ((x._1, x._2))
+              case Some(i) => z.updated(x._1, x._2 + i)
+            }
+          }))
         }
-      }))
+      case BigBag(left, right) => {
+        
+      }
     }
   }
 
@@ -82,4 +108,7 @@ case class Bag[A](theMap: ScalaMap[A, BigInt]) {
     val res = v min that.get(k)
     if (res <= 0) Nil else List(k -> res)
   })
+
+  case class SmallBag[A](theMap: ScalaMap[A, BigInt])
+  case class BigBag[A](left: Bag[A], right: Bag[A])
 }
