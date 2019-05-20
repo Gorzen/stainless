@@ -2,28 +2,20 @@
 
 package stainless.lang
 import stainless.annotation._
-import scala.collection.immutable.HashMap
+import scala.collection.immutable.{Map => ScalaMap}
 
 object Bag {
   @library @inline
-  def empty[A] = Bag(HashMap.empty[A, BigInt])
+  def empty[A] = Bag[A]()
 
   @ignore
   def apply[A](elems: (A, BigInt)*): Bag[A] = {
-    if (elems.isEmpty)
-      empty[A]
-    else {
-      val theMap = elems.groupBy(_._1).mapValues(_.map(_._2).sum)
-
-      val hashMap = HashMap.apply(theMap.toSeq:_*)
-
-      Bag(hashMap)
-    }
+    Bag(elems.toMap)
   }
 }
 
 @ignore
-case class Bag[A](theMap: HashMap[A, BigInt]) {
+case class Bag[A](theMap: ScalaMap[A, BigInt]) {
   import scala._
 
   def apply(a: A): BigInt = get(a)
@@ -69,7 +61,7 @@ case class Bag[A](theMap: HashMap[A, BigInt]) {
         }
       }))
     else
-      Bag(this.theMap.toSeq.foldLeft(HashMap.empty[A, BigInt])((z, x) => {
+      Bag(this.theMap.toSeq.foldLeft(ScalaMap.empty[A, BigInt])((z, x) => {
         val countToSubtract = that.get(x._1)
 
         if (countToSubtract > 0) {
