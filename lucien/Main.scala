@@ -8,7 +8,6 @@ import java.io._
 
 object Main {
   import FoldMapConcRope.{fold => foldC}
-  import FoldMapConcRope.concRopeFromList
   import FoldMapConcRope.foldSequential
   import FoldMapList.{fold => foldL}
   import MergeSort.{sort => mSort}
@@ -16,6 +15,7 @@ object Main {
   import WordCount._
   import TotalOrderWC._
   import ConcRope._
+  import ConcRope.Conc.{fromList => fromList}
 
   @extern
   def main(args: Array[String]): Unit = {
@@ -69,15 +69,20 @@ object Main {
     println("Finish reading file, start fold")
 
     val wc: WC = if(parallel) {
-      val (c, s1) = time(Conc.fromList(list), "ConcRope from list:")
+      val (c, s1) = time(fromList(list), "ConcRope from list:")
+      println("Finish conversion")
 
       val (v, s2) = time(foldC(c)(WordCountMonoid()), "Parallel fold on ConcRope:")
+      println("Finish fold")
       timeAnalysis += s1 + s2
       v
     } else if(sequential) {
-      val (c, s1) = time(Conc.fromList(list), "ConcRope from list:")
+      val (c, s1) = time(fromList(list), "ConcRope from list:")
+      println("Finish conversion")
+
 
       val (v, s2) = time(foldSequential(c)(WordCountMonoid()), "Sequential fold on ConcRope:")
+      println("Finish fold")
       timeAnalysis += s1 + s2
       v
     } else {

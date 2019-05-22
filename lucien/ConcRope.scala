@@ -28,13 +28,22 @@ object ConcRope {
 
     def empty[T]: Conc[T] = Empty[T]()
 
-    def fromList[T](xs: List[T]): Conc[T] = {
-      privateFromList(xs.reverse)
-    } ensuring (res => (res.toList == xs) because ListSpecs.reverseReverse(xs) && res.valid && res.content == xs.content && res.size == xs.size)
+    def fromList[T](xs: List[T]): Conc[T] = { xs match {
+      case Nil() => Empty[T]()
+      case y :: ys => y :: fromList(ys)
+    }} ensuring { res => res.toList == xs &&
+      res.size == xs.size &&
+      res.content == xs.content &&
+      res.valid &&
+      res.isNormalized
+    }
 
-    private def privateFromList[T](xs: List[T]): Conc[T] = {
+    def fromListReversed[T](xs: List[T]): Conc[T] = {
       ConcRopeFromList.concRopeFromList(xs)
-    } ensuring (res => res.valid && (res.toList == xs.reverse) because ConcRopeFromList.lemma_concRopeFromList(xs))
+    } ensuring (res => res.valid &&
+      res.content == xs.content &&
+      res.size == xs.size &&
+      (res.toList == xs.reverse) because ConcRopeFromList.lemma_concRopeFromList(xs))
   }
 
   sealed abstract class Conc[T] {

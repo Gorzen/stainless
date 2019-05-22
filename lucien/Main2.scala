@@ -8,7 +8,6 @@ import java.io._
 
 object Main2 {
   import FoldMapConcRope.{fold => foldC}
-  import FoldMapConcRope.concRopeFromList
   import FoldMapConcRope.foldSequential
   import FoldMapList.{fold => foldL}
   import MergeSort.{sort => mSort}
@@ -16,6 +15,7 @@ object Main2 {
   import WordCount._
   import TotalOrderWC._
   import ConcRope._
+  import ConcRope.Conc.{fromListReversed => fromList}
 
   @extern
   def main(args: Array[String]): Unit = {
@@ -41,7 +41,8 @@ object Main2 {
     // Scala list to stainless list?
     val wordsStd = Source.fromFile(args(0)).getLines
 
-    val t = System.nanoTime
+    var time_fold: Long = 0
+    var time_conv: Long = 0
 
     val scalaListOfWC = wordsStd.zipWithIndex.map(x => {
       val line = x._1
@@ -60,17 +61,27 @@ object Main2 {
       val list: List[WC] = wordsV
 
       val wc: WC = if(parallel) {
-        val c = concRopeFromList(list)
+        val t1 = System.nanoTime
+        val c = fromList(list)
+        time_conv += System.nanoTime - t1
 
+        val t2 = System.nanoTime
         val v = foldC(c)(WordCountMonoid())
+        time_fold += System.nanoTime - t2
         v
       } else if(sequential) {
-        val c = concRopeFromList(list)
+        val t1 = System.nanoTime
+        val c = fromList(list)
+        time_conv += System.nanoTime - t1
 
+        val t2 = System.nanoTime
         val v = foldSequential(c)(WordCountMonoid())
+        time_fold += System.nanoTime - t2
         v
       } else {
+        val t2 = System.nanoTime
         val v = foldL(list)(WordCountMonoid())
+        time_fold += System.nanoTime - t2
         v
       }
       wc
@@ -87,21 +98,33 @@ object Main2 {
     val list: List[WC] = wordsV
 
     val wc: WC = if(parallel) {
-      val c = concRopeFromList(list)
+      val t1 = System.nanoTime
+      val c = fromList(list)
+      time_conv += System.nanoTime - t1
 
+      val t2 = System.nanoTime
       val v = foldC(c)(WordCountMonoid())
+      time_fold += System.nanoTime - t2
       v
     } else if(sequential) {
-      val c = concRopeFromList(list)
+      val t1 = System.nanoTime
+      val c = fromList(list)
+      time_conv += System.nanoTime - t1
 
+      val t2 = System.nanoTime
       val v = foldSequential(c)(WordCountMonoid())
+      time_fold += System.nanoTime - t2
       v
     } else {
+      val t2 = System.nanoTime
       val v = foldL(list)(WordCountMonoid())
+      time_fold += System.nanoTime - t2
       v
     }
 
-    timeAnalysis += "Finish fold in " + (System.nanoTime - t) / 1e9 + " seconds, start retrieving list\n"
+    if(parallel || sequential)
+      timeAnalysis += "All conversions took " + time_conv / 1e9 + " seconds\n"
+    timeAnalysis += "Folding took " + time_fold / 1e9 + " seconds, start retrieving list\n"
 
     val scalaWords = wc.words.theMap.toList
 
