@@ -59,7 +59,7 @@ object Main {
     }
 
     // This list is reversed, but it doesn't matter if we count words
-    var uniqueWords: List[String] = uniqueWordsV
+    val uniqueWords: List[String] = uniqueWordsV
 
     println("Starting word count for file '" + args(0) + "' in " + (if(parallel) "parallel on ConcRope" else if(sequential) "sequential on ConcRope" else "sequential on List") + " with " + (if(noSort) "no" else if(merge) "merge" else "insertion") + " sort.")
 
@@ -93,10 +93,12 @@ object Main {
 
     println("Finish fold, start retrieving list")
 
-    val wordCount: List[(String, BigInt)] = uniqueWords
+    val (wordCount: List[(String, BigInt)], s) = time(uniqueWords
       .foldLeft(List[(String, BigInt)]()) { case (acc, w) =>
         Cons((w, wc.words(w)), acc)
-      }
+      }, "Time to retrieve list:")
+
+    timeAnalysis += s
 
     //.map(s => (s, wc.words.apply(s)))
 
