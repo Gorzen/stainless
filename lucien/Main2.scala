@@ -47,14 +47,14 @@ object Main2 {
     var uniqueWordsStd: scala.collection.immutable.Set[String] = scala.collection.immutable.Set()
 
     val scalaListOfWC = wordsStd.zipWithIndex.map(x => {
-      val line = x._1
-      uniqueWordsStd = uniqueWordsStd ++ line.split(' ').toSet
+      val line = x._1.split(' ').map(_.trim).filterNot(_.isEmpty).toList
+      uniqueWordsStd = uniqueWordsStd ++ line.toSet
 
       if (x._2 % 10000 == 0){
         println("Doing line " + x._2)
       }
 
-      val words = line.split(' ').map(s => WC(Bag((s, BigInt(1)))))
+      val words = line.map(s => WC(Bag((s, BigInt(1)))))
 
       var wordsV: List[WC] = Nil[WC]()
       for (e <- words){
@@ -89,14 +89,6 @@ object Main2 {
       }
       wc
     })
-
-    var uniqueWordsV: List[String] = Nil[String]()
-    for(e <- uniqueWordsStd){
-      uniqueWordsV = Cons(e, uniqueWordsV)
-    }
-
-    // This list is reversed, but it doesn't matter if we count words
-    val uniqueWords: List[String] = uniqueWordsV
 
     println("Finish reading file, start fold")
 
@@ -136,6 +128,14 @@ object Main2 {
     if(parallel || sequential)
       timeAnalysis += "All conversions took " + time_conv / 1e9 + " seconds\n"
     timeAnalysis += "Folding took " + time_fold / 1e9 + " seconds, start retrieving list\n"
+
+    var uniqueWordsV: List[String] = Nil[String]()
+    for(e <- uniqueWordsStd){
+      uniqueWordsV = Cons(e, uniqueWordsV)
+    }
+
+    // This list is reversed, but it doesn't matter if we count words
+    val uniqueWords: List[String] = uniqueWordsV
 
     val (wordCount: List[(String, BigInt)], s) = time(uniqueWords
       .foldLeft(List[(String, BigInt)]()) { case (acc, w) =>
