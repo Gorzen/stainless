@@ -63,8 +63,10 @@ sealed abstract class Bag[A] {
     }
   }
 
+  def ++(that: Bag[A]): Bag[A] = BigBag(this, that)
+
   // Should be constant time if bags > threshold
-  def ++(that: Bag[A]): Bag[A] = {
+  /**def ++(that: Bag[A]): Bag[A] = {
     (this, that) match {
       case (SmallBag(theMap), SmallBag(thatMap)) => {
         if (theMap.size + thatMap.size <= threshold)
@@ -91,7 +93,7 @@ sealed abstract class Bag[A] {
           BigBag(this, that)
       }
     }
-  }
+  }*/
 
   // Try a different approach to have trees closer to threshold
   /**def ++(that: Bag[A]): Bag[A] = {
