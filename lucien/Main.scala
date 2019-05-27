@@ -15,7 +15,7 @@ object Main {
   import WordCount._
   import TotalOrderWC._
   import ConcRope._
-  import ConcRope.Conc.{fromList => fromList}
+  import ConcRope.Conc.{fromListReversed => fromList}
 
   @extern
   def main(args: Array[String]): Unit = {
