@@ -21,16 +21,6 @@ trait ComponentTestSuite extends inox.TestSuite with inox.ResourceUtils with Inp
     "check=" + options.findOptionOrDefault(inox.solvers.optCheckModels)
   }
 
-  protected val runSlowTests: Boolean = {
-    sys.env
-      .get("RUN_SLOW_TESTS")
-      .map {
-        case "true" => true
-        case _      => false
-      }
-      .getOrElse(false)
-  }
-
   protected val slowBenchmarks = Set(
     "imperative/valid/NestedFunParamsMutation2",
 
@@ -64,7 +54,7 @@ trait ComponentTestSuite extends inox.TestSuite with inox.ResourceUtils with Inp
   )
 
   protected def filter(ctx: inox.Context, name: String): FilterStatus = name match {
-    case name if !runSlowTests && slowBenchmarks.contains(name) => Skip
+    case name if SlowTests.disabled && slowBenchmarks.contains(name) => Skip
     case name => Test
   }
 
