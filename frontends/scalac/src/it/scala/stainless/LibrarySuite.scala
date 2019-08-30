@@ -52,5 +52,36 @@ class LibrarySuite extends FunSpec with InputUtils {
         (analysis.results collect { case (fd, (g, _)) if !g.isGuaranteed => fd.id.name -> g } mkString "\n")
       )
     }
+
+    val runSlowTests: Boolean = {
+      sys.env
+        .get("RUN_SLOW_TESTS")
+        .map {
+          case "true" => true
+          case _      => false
+        }
+        .getOrElse(false)
+    }
+
+    if(runSlowTests) {
+      val optsSlow = inox.Options(Seq(inox.optSelectedSolvers(Set("smt-z3")), verification.optTypeChecker(true)))
+      val ctxSlow = stainless.TestContext(optsSlow)
+
+      it("should type check") {
+        import verification.VerificationComponent
+        val run = VerificationComponent.run(extraction.pipeline)(ctxSlow)
+        val exProgram = inox.Program(run.trees)(run extract tryProgram.get.symbols)
+        assert(reporter.errorCount == 0, "Verification extraction had errors")
+
+        import exProgram.trees._
+        val funs = exProgram.symbols.functions.values.filterNot(_.flags contains Unchecked).map(_.id).toSeq
+        val analysis = Await.result(run.execute(funs, exProgram.symbols), Duration.Inf)
+        val report = analysis.toReport
+        assert(report.totalConditions == report.totalValid,
+          "Only " + report.totalValid + " valid out of " + report.totalConditions + "\n" +
+          "Invalids are:\n" + analysis.vrs.filter(_._2.isInvalid).mkString("\n") + "\n" +
+          "Unknowns are:\n" + analysis.vrs.filter(_._2.isInconclusive).mkString("\n"))
+      }
+    }
   }
 }

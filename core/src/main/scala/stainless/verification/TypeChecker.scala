@@ -1092,8 +1092,8 @@ trait TypeChecker {
     for ((id,fd) <- symbols.functions) {
       if (
         symbols.isRecursive(id) &&
-        !fd.flags.contains(Synthetic) &&
-        !fd.flags.exists(_.name == "library") &&
+        //!fd.flags.contains(Synthetic) &&
+        //!fd.flags.exists(_.name == "library") &&
         fd.measure.isEmpty
       )
         throw new TypeCheckingException(fd, s"A recursive function (${id.asString}) must have a measure")
